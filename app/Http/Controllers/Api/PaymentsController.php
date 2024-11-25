@@ -147,7 +147,8 @@ class PaymentsController extends Controller
                 'message' => 'Failed to update payment',
                 'error' => $e->getMessage(),
             ],500);
-        }        
+        }   
+             
     }
 
     /**
