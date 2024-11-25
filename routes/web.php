@@ -20,8 +20,16 @@ use Illuminate\Support\Facades\Auth;
 //     return view('welcome');
 // });
 
-Route::get('/', [FieldCentreController::class, 'index']);
+Route::get('/', [FieldCentreController::class, 'landingPage']);
 
 Auth::routes();
 
-Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard')->middleware('auth');
+
+Route::middleware(['auth'])->group(function () {
+    Route::prefix('dashboard')->group(function () {
+        Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+        Route::resource('/field-centres', FieldCentreController::class);
+    
+    });
+});
