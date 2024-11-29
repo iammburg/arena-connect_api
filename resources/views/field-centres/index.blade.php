@@ -31,7 +31,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @if ($fieldCentres->count() > 0)
+                                    @if ($field_centres->count() > 0)
                                         @foreach ($field_centres as $field_centre)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>

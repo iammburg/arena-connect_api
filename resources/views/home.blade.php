@@ -494,7 +494,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="card">
                     <div class="social-graph-wrapper widget-facebook">
-                        <span class="s-icon"><i class="fa fa-facebook"></i></span>
+                        <span class="s-icon"><i class="fa-brands fa-facebook"></i></span>
                     </div>
                     <div class="row">
                         <div class="col-6 border-right">
@@ -515,7 +515,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="card">
                     <div class="social-graph-wrapper widget-linkedin">
-                        <span class="s-icon"><i class="fa fa-linkedin"></i></span>
+                        <span class="s-icon"><i class="fa-brands fa-linkedin"></i></span>
                     </div>
                     <div class="row">
                         <div class="col-6 border-right">
@@ -536,7 +536,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="card">
                     <div class="social-graph-wrapper widget-googleplus">
-                        <span class="s-icon"><i class="fa fa-google-plus"></i></span>
+                        <span class="s-icon"><i class="fa-brands fa-google-plus-g"></i></span>
                     </div>
                     <div class="row">
                         <div class="col-6 border-right">
@@ -557,7 +557,7 @@
             <div class="col-lg-3 col-sm-6">
                 <div class="card">
                     <div class="social-graph-wrapper widget-twitter">
-                        <span class="s-icon"><i class="fa fa-twitter"></i></span>
+                        <span class="s-icon"><i class="fa-brands fa-twitter"></i></span>
                     </div>
                     <div class="row">
                         <div class="col-6 border-right">

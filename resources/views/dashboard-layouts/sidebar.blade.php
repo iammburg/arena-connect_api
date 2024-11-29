@@ -7,7 +7,7 @@
                     <i class="fa-solid fa-gauge-high"></i><span class="nav-text">Dashboard</span>
                 </a>
                 <ul aria-expanded="false">
-                    <li><a href="{{ url('/') }}">Home Page</a></li>
+                    <li><a href="{{ url('/') }}">Landing Page</a></li>
                     <!-- <li><a href="./index-2.html">Home 2</a></li> -->
                 </ul>
             </li>
