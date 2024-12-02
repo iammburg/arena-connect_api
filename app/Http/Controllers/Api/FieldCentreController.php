@@ -83,7 +83,7 @@ class FieldCentreController extends Controller
         $add_field_centres->price_from = $request->price_from;
         // $add_field_centres->facilities = $request->facilities;
         $add_field_centres->rating = $request->rating;
-        $add_field_centres->images = json_encode($imagePaths, true);
+        $add_field_centres->images = json_encode($imagePaths, JSON_UNESCAPED_SLASHES);
 
         $add_field_centres->save();
         $add_field_centres->facilities()->sync($request->facility_ids);
