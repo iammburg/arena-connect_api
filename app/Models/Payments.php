@@ -16,6 +16,7 @@ class Payments extends Model
         "end_time", 
         "status", 
         "order_id", 
+        "payment_code",
         "receipt", 
         "date"
     ];

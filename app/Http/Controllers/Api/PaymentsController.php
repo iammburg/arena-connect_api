@@ -52,7 +52,8 @@ class PaymentsController extends Controller
             'payment_method' => 'required',
             'status' => 'required',
             'order_id' => 'required|numeric|min:0',
-            'receipt' => 'required|numeric|min:0',
+            'payment_code' => 'required|numeric|min:0',
+            'receipt.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             'date' => 'required|date',
         ];
 
@@ -65,13 +66,23 @@ class PaymentsController extends Controller
             ], 422);
         }
 
+        $imagePaths = [];
+
+        if ($request->hasFile('receipt')) {
+            foreach ($request->file('receipt') as $image) {
+                $path = $image->store('images', 'public');
+                $imagePaths[] = url('storage/' . $path);
+            }
+        }
+
         $add_payments->user_id = $request->user_id;
         $add_payments->booking_id = $request->booking_id;
         $add_payments->total_payment = $request->total_payment;
         $add_payments->payment_method = $request->payment_method;
         $add_payments->status = $request->status;
         $add_payments->order_id = $request->order_id;
-        $add_payments->receipt = $request->receipt;
+        $add_payments->payment_code = $request->payment_code;
+        $add_payments->receipt = json_encode($imagePaths, JSON_UNESCAPED_SLASHES);
         $add_payments->date = $request->date;
 
         $add_payments->save();
@@ -113,7 +124,8 @@ class PaymentsController extends Controller
                 'payment_method' => 'required',
                 'status' => 'required',
                 'order_id' => 'required|numeric|min:0',
-                'receipt' => 'required|numeric|min:0',
+                'payment_code' => 'required|numeric|min:0',
+                'receipt.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'date' => 'required|date',
 
             ];
@@ -125,13 +137,24 @@ class PaymentsController extends Controller
                     'data' => $validator->errors(),
                 ],422);
             }
+            
+            $imagePaths = [];
+
+            if ($request->hasFile('receipt')) {
+                foreach ($request->file('receipt') as $image) {
+                    $path = $image->store('images', 'public');
+                    $imagePaths[] = url('storage/' . $path);
+                }
+            }
+
             $payments->user_id = $request->user_id;
             $payments->booking_id = $request->booking_id;
             $payments->total_payment = $request->total_payment;
             $payments->payment_method = $request->payment_method;
             $payments->status = $request->status;
             $payments->order_id = $request->order_id;
-            $payments->receipt = $request->receipt;
+            $payments->payment_code = $request->payment_code;
+            $payments->receipt = json_encode($imagePaths, JSON_UNESCAPED_SLASHES);
             $payments->date = $request->date;
 
             $payments->save();
