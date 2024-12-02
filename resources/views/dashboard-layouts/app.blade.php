@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>@yield('title') - Where Games Begin!</title>
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('admin-assets/images/favicon.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/images/arena-connect1.png') }}">
     <!-- Pignose Calender -->
     <link href="./plugins/pg-calendar/css/pignose.calendar.min.css" rel="stylesheet">
     <!-- Chartist -->
@@ -15,6 +15,14 @@
     <link rel="stylesheet" href="./plugins/chartist-plugin-tooltips/css/chartist-plugin-tooltip.css">
     <!-- Custom Stylesheet -->
     <link href="{{ asset('admin-assets/css/style.css') }}" rel="stylesheet">
+
+    {{-- Font Awesome --}}
+    <link href="{{ asset('assets/fontawesome-free-6.7.1-web/css/fontawesome.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/fontawesome-free-6.7.1-web/css/brands.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/fontawesome-free-6.7.1-web/css/solid.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/fontawesome-free-6.7.1-web/css/sharp-thin.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/fontawesome-free-6.7.1-web/css/duotone-thin.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/fontawesome-free-6.7.1-web/css/sharp-duotone-thin.css') }}" rel="stylesheet" />
 
 </head>
 

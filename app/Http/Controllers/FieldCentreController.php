@@ -13,8 +13,16 @@ class FieldCentreController extends Controller
     public function index()
     {
         $field_centres = FieldCentre::with(['facilities' => function ($query) {
-            $query->select('facilities.name');
-        }, 'fields'])->get();
+                $query->select('facilities.name');
+            }, 'fields'])->get();
+
+        return view('field-centres.index', compact('field_centres'));
+    }
+    public function landingPage()
+    {
+        $field_centres = FieldCentre::with(['facilities' => function ($query) {
+                $query->select('facilities.name');
+            }, 'fields'])->get();
 
         return view('index', compact('field_centres'));
     }
