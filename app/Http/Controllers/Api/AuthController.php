@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
@@ -80,7 +81,12 @@ class AuthController extends Controller
      */
     public function index()
     {
-        //
+        $users = User::all();
+        return response()->json([
+            'success' => true,
+            'message' => 'List of all users',
+            'data' => $users,
+        ], 200);
     }
 
     /**
@@ -118,9 +124,38 @@ class AuthController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name'      => 'required|string|max:255',
+            'email'     => 'required|string|email|max:255',
+            'password'  => 'string',
+            // 'role'      => 'required',
+        ]);
+
+        $updateUser = User::find($id);
+
+        if ($request->password) {
+            $updateUser->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                // 'role' => $request->role,
+            ]);
+        } else {
+            $updateUser->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => $request->old_password,
+                // 'role' => $request->role,
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User updated successfully',
+            'data' => $updateUser,
+        ], 200);
     }
 
     /**

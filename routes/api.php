@@ -44,3 +44,5 @@ Route::resource('payments', PaymentsController::class);
 
 // Untuk Bookings
 Route::resource('bookings', BookingController::class);
+
+Route::resource('/users', AuthController::class);
