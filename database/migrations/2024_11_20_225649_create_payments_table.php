@@ -28,7 +28,7 @@ return new class extends Migration
             //     ->cascadeOnUpdate();
             $table->decimal('total_payment');
             $table->enum('payment_method', ['BRI','BNI']);
-            $table->enum('status', ['belum', 'proses', 'selesai']);
+            $table->enum('status', ['belum', 'proses', 'selesai'])->default('belum');
             $table->char('order_id', length: 45);
             $table->char('receipt', length: 45);
             $table->date('date');
