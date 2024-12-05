@@ -82,9 +82,27 @@ class BookingController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Booking $booking)
+    public function show($id)
     {
-        //
+        try {
+            $booking = Booking::with([
+                'user:id,name',
+                'field:id,name,field_centre_id,type',
+                'field.fieldCentre:id,name,rating,address',
+            ])->find($id);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Successfully get detail data on booking',
+                'data' => $booking,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve booking details',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
