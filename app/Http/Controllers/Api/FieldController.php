@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Field;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Ramsey\Uuid\Guid\Fields;
 
 class FieldController extends Controller
 {
@@ -36,8 +38,8 @@ class FieldController extends Controller
         try {
             $fields = Field::where('field_centre_id', $fieldCentreId)
                 ->with([
-                    'prices:id,field_id,price_from,price_to',
-                    'schedules:id,field_id,date,start_time,end_time,is_booked',
+                    'prices:field_id,price_from,price_to',
+                    'schedules:field_id,date,start_time,end_time,is_booked',
                     'fieldCentre:name,id'
                 ])
                 ->get();
@@ -85,14 +87,62 @@ class FieldController extends Controller
     public function store(Request $request)
     {
         //
+        $add_field = new Field();
+        $rules = [
+            'name' => 'required',
+            'field_centre_id' => 'required',
+            'type' => 'required',
+            'descriptions' => 'required',
+            'status' => 'required',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message'=> 'Validation errors',
+                'data'=> $validator->errors(),
+            ], 422);
+        }
+
+        $add_field->name = $request->name;
+        $add_field->field_centre_id = $request->field_centre_id;
+        $add_field->type = $request->type;
+        $add_field->descriptions = $request->descriptions;
+        $add_field->status = $request->status;
+
+        $add_field->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Add new field centre successfully',
+            'data' => $add_field,
+        ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Field $field)
+    public function show($id)
     {
         //
+        try {
+            $field = Field::with(['user', 'name' => function ($query) {
+                $query->select('field.name');
+            }])->findOrFail($id);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Successfully get detail data on Sports Field',
+                'data' => $field,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve field details',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
