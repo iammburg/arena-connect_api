@@ -435,7 +435,7 @@
                                 <div class="text pt-4">
                                     <p class="mb-4">Far far away, behind the word mountains, far from the countries
                                         Vokalia and Consonantia, there live the blind texts.</p>
-                                    <p class="name">Roger Scott</p>
+                                    <p class="name">Roger Sumatra</p>
                                     <span class="position">Web Developer</span>
                                 </div>
                             </div>
