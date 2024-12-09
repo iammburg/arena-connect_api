@@ -44,3 +44,6 @@ Route::resource('payments', PaymentsController::class);
 
 // Untuk Bookings
 Route::resource('bookings', BookingController::class);
+
+//bukti Show payments
+Route::get('payments/{id}', [PaymentsController::class, 'show']);
