@@ -10,14 +10,14 @@ class Payments extends Model
     use HasFactory;
 
     protected $fillable = [
-        "user_id", 
-        "total_payment", 
-        "payment_method", 
+        "user_id",
+        "booking_id",
+        "total_payment",
+        "payment_method",
         "end_time", 
-        "status", 
-        "order_id", 
-        "payment_code",
-        "receipt", 
+        "status",
+        "order_id",
+        "receipt",
         "date"
     ];
 

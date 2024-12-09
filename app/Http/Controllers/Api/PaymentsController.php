@@ -45,53 +45,39 @@ class PaymentsController extends Controller
      */
     public function store(Request $request)
     {
-        $add_payments = new Payments();
-        $rules = [
+        //Validate Form
+        $request->validate([
             'user_id' => 'required',
             'booking_id' => 'required',
             'total_payment' => 'required',
             'payment_method' => 'required',
             'status' => 'required',
             'order_id' => 'required|numeric|min:0',
-            'payment_code' => 'required|numeric|min:0',
-            'receipt.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'receipt' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'date' => 'required|date',
-        ];
+        ]);
 
-        $validator = Validator::make($request->all(), $rules);
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation errors',
-                'data' => $validator->errors(),
-            ], 422);
-        }
+        //UPLOAD Image
+        $receipt = $request->file('receipt');
+        $receipt->storeAs('public/images', $receipt->hashName());
 
-        $imagePaths = [];
-
-        if ($request->hasFile('receipt')) {
-            foreach ($request->file('receipt') as $image) {
-                $path = $image->store('images', 'public');
-                $imagePaths[] = url('storage/' . $path);
-            }
-        }
-
-        $add_payments->user_id = $request->user_id;
-        $add_payments->booking_id = $request->booking_id;
-        $add_payments->total_payment = $request->total_payment;
-        $add_payments->payment_method = $request->payment_method;
-        $add_payments->status = $request->status;
-        $add_payments->order_id = $request->order_id;
-        $add_payments->payment_code = $request->payment_code;
-        $add_payments->receipt = json_encode($imagePaths, JSON_UNESCAPED_SLASHES);
-        $add_payments->date = $request->date;
-
-        $add_payments->save();
+        //Create Payments
+        Payments::create([
+            'user_id' => $request->user_id,
+            'booking_id' => $request->booking_id,
+            'total_payment' => $request->total_payment,
+            'payment_method' => $request->payment_method,
+            'status' => $request->status,
+            'order_id' => $request->order_id,
+            'receipt' => $receipt->hashName(),
+            'date' => $request->date,
+        ]);
+        $payments = Payments::all();
 
         return response()->json([
             'success' => true,
             'message' => 'Add new Payments successfully',
-            'data' => $add_payments,
+            'data' => $payments ,
         ], 201);
     }
 
@@ -134,77 +120,76 @@ class PaymentsController extends Controller
      */
     public function edit(Payments $payments)
     {
-        //
+        //Get Product by ID
+        $payment = Payments::findOrFail($id);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,  $id)
     {
         try {
-            // Aturan validasi
-            $rules = [
+            //Validate Form
+            $request->validate([
                 'user_id' => 'required',
                 'booking_id' => 'required',
                 'total_payment' => 'required',
                 'payment_method' => 'required',
                 'status' => 'required',
                 'order_id' => 'required|numeric|min:0',
-                'payment_code' => 'required|numeric|min:0',
-                'receipt.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'receipt' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'date' => 'required|date',
-            ];
-
-            // Validasi input
-            $validator = Validator::make($request->all(), $rules);
-            if ($validator->fails()) {
-                \Log::error('Validation Errors:', $validator->errors()->toArray());
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Validation errors',
-                    'data' => $validator->errors(),
-                ], 422);
-            }
-            // Temukan data berdasarkan ID
-            $payment = Payments::findOrFail($id);
-
-            // // Mengelola file receipt jika ada
-            $imagePaths = [];
-
-            if ($request->hasFile('receipt')) {
-                foreach ($request->file('receipt') as $image) {
-                    $path = $image->store('images', 'public');
-                    $imagePaths[] = url('storage/' . $path);
-                }
-            }
-
-            // Update data Payment secara langsung
-            $payment->update([
-                'user_id' => $request->user_id,
-                'booking_id' => $request->booking_id,
-                'total_payment' => $request->total_payment,
-                'payment_method' => $request->payment_method,
-                'status' => $request->status,
-                'order_id' => $request->order_id,
-                'payment_code' => $request->payment_code,
-                'receipt' => !empty($imagePaths) ? json_encode($imagePaths, JSON_UNESCAPED_SLASHES) : $payment->receipt, // Hanya jika ada gambar yang diunggah
-                'date' => $request->date,
             ]);
-
+    
+            //Get Product by ID
+            $payment = Payments::findOrFail($id);
+    
+            //Check if Image is Uploaded
+            if ($request -> hasFile('receipt')) {
+                //Upload New Image
+                $receipt = $request->file('receipt');
+                $receipt->storeAs('public/images', $receipt->hashName());
+    
+                //Delete Old Image
+                Storage::delete('public/images'.$payment->receipt);
+    
+                //Update Product with new Image
+                $payment->update([
+                    'user_id' => $request->user_id,
+                    'booking_id' => $request->booking_id,
+                    'total_payment' => $request->total_payment,
+                    'payment_method' => $request->payment_method,
+                    'status' => $request->status,
+                    'order_id' => $request->order_id,
+                    'receipt' => $receipt->hashName(),
+                    'date' => $request->date,
+                ]);
+            } else {
+                //Update Payment without Image
+                $payment->update([
+                    'user_id' => $request->user_id,
+                    'booking_id' => $request->booking_id,
+                    'total_payment' => $request->total_payment,
+                    'payment_method' => $request->payment_method,
+                    'status' => $request->status,
+                    'order_id' => $request->order_id,
+                    'date' => $request->date,
+                ]);
+            }
+            
             return response()->json([
                 'success' => true,
                 'message' => 'Payment updated successfully',
                 'data' => $payment,
             ], 200);
-
+            
         } catch (\Exception $e) {
-            \Log::error('Payment Update Failed:', ['error' => $e->getMessage()]);
             return response()->json([
-                'success' => false,
+                'success' =>false,
                 'message' => 'Failed to update payment',
                 'error' => $e->getMessage(),
-            ], 500);
+            ],500);
         }
     }
 
