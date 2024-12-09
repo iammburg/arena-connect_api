@@ -101,13 +101,24 @@ class PaymentsController extends Controller
     public function show($id)
     {
         try {
-            // Temukan data berdasarkan ID
-            $payment = Payments::findOrFail($id);
-    
+            $payments = Payments::with([
+                'field' => function ($query) {
+                    $query->select('fields.id as field_id', 'fields.name', 'fields.field_centre_id')
+                        ->with([
+                            'fieldCentre:id,name,rating,address'
+                        ]);
+                },
+
+                'booking' => function ($query) {
+                    $query->select('id', 'field_id', 'booking_start', 'booking_end', 'date');
+                }
+            ])
+                ->find($id);
             return response()->json([
                 'success' => true,
                 'message' => 'Successfully retrieved payment details',
-                'data' => $payment,
+                'data' => $payments
+
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -129,9 +140,9 @@ class PaymentsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,  $id)
+    public function update(Request $request, $id)
     {
-        try{
+        try {
             // Aturan validasi
             $rules = [
                 'user_id' => 'required',
@@ -144,20 +155,20 @@ class PaymentsController extends Controller
                 'receipt.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'date' => 'required|date',
             ];
-            
+
             // Validasi input
-            $validator = Validator::make($request->all(),$rules);
-            if($validator->fails()){
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
                 \Log::error('Validation Errors:', $validator->errors()->toArray());
                 return response()->json([
-                    'success' =>false,
-                    'message'=>'Validation errors',
+                    'success' => false,
+                    'message' => 'Validation errors',
                     'data' => $validator->errors(),
-                ],422);
+                ], 422);
             }
             // Temukan data berdasarkan ID
             $payment = Payments::findOrFail($id);
-            
+
             // // Mengelola file receipt jika ada
             $imagePaths = [];
 
@@ -186,15 +197,15 @@ class PaymentsController extends Controller
                 'message' => 'Payment updated successfully',
                 'data' => $payment,
             ], 200);
-                
-        }catch(\Exception $e){
+
+        } catch (\Exception $e) {
             \Log::error('Payment Update Failed:', ['error' => $e->getMessage()]);
             return response()->json([
-                'success' =>false,
+                'success' => false,
                 'message' => 'Failed to update payment',
                 'error' => $e->getMessage(),
-            ],500);
-        }   
+            ], 500);
+        }
     }
 
     /**
