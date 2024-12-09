@@ -18,11 +18,15 @@ class Booking extends Model
 
     public function field()
     {
-        return $this->belongsTo(Field::class);
+        return $this->belongsTo(Field::class, 'field_id');
     }
 
     public function payments()
     {
-        return $this->hasOne(Payments::class);
+        return $this->hasOne(Payments::class, 'booking_id', 'id');
+    }
+    public function fieldCentre()
+    {
+        return $this->belongsTo(FieldCentre::class, 'field_centre_id');
     }
 }

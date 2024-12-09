@@ -28,6 +28,10 @@ class Payments extends Model
 
     public function booking()
     {
-        return $this->hasOne(Booking::class);
+        return $this->belongsTo(Booking::class, 'booking_id');
+    }
+    public function field()
+    {
+        return $this->hasOneThrough(Field::class, Booking::class, 'id', 'id', 'booking_id', 'field_id')->select('fields.id as field_id', 'fields.name');
     }
 }
