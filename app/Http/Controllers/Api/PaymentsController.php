@@ -16,7 +16,18 @@ class PaymentsController extends Controller
     public function index()
     {
         try {
-            $payments = Payments::all();
+            $payments = Payments::with([
+                'field' => function ($query) {
+                    $query->select('fields.id as field_id', 'fields.name', 'fields.field_centre_id')
+                        ->with([
+                            'fieldCentre:id,name,rating,address',
+                        ]);
+                },
+
+                'booking' => function ($query) {
+                    $query->select('id', 'field_id', 'booking_start', 'booking_end', 'date');
+                }
+            ])->get();
 
             return response()->json([
                 'success' => true,
