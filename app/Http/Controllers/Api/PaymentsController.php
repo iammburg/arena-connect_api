@@ -26,7 +26,8 @@ class PaymentsController extends Controller
 
                 'booking' => function ($query) {
                     $query->select('id', 'field_id', 'booking_start', 'booking_end', 'date');
-                }
+                },
+                'user:id,name,email',
             ])->get();
 
             return response()->json([
@@ -106,7 +107,8 @@ class PaymentsController extends Controller
 
                 'booking' => function ($query) {
                     $query->select('id', 'field_id', 'booking_start', 'booking_end', 'date');
-                }
+                },
+                'user:id,name,email',
             ])
                 ->find($id);
             return response()->json([
