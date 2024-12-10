@@ -54,12 +54,11 @@ class PaymentsController extends Controller
             'status' => 'required',
             'order_id' => 'required|numeric|min:0',
             'receipt' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'date' => 'required|date',
         ]);
 
         //UPLOAD Image
         $receipt = $request->file('receipt');
-        $receipt->storeAs('public/images', $receipt->hashName());
+        $receipt->storeAs('public/receipts', $receipt->hashName());
 
         //Create Payments
         Payments::create([
@@ -70,14 +69,13 @@ class PaymentsController extends Controller
             'status' => $request->status,
             'order_id' => $request->order_id,
             'receipt' => $receipt->hashName(),
-            'date' => $request->date,
         ]);
         $payments = Payments::all();
 
         return response()->json([
             'success' => true,
             'message' => 'Add new Payments successfully',
-            'data' => $payments ,
+            'data' => $payments,
         ], 201);
     }
 
@@ -91,7 +89,7 @@ class PaymentsController extends Controller
                 'field' => function ($query) {
                     $query->select('fields.id as field_id', 'fields.name', 'fields.field_centre_id')
                         ->with([
-                            'fieldCentre:id,name,rating,address'
+                            'fieldCentre:id,name,rating,address',
                         ]);
                 },
 
@@ -103,7 +101,7 @@ class PaymentsController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Successfully retrieved payment details',
-                'data' => $payments
+                'data' => $payments,
 
             ], 200);
         } catch (\Exception $e) {
@@ -118,7 +116,7 @@ class PaymentsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Payments $payments)
+    public function edit($id)
     {
         //Get Product by ID
         $payment = Payments::findOrFail($id);
@@ -127,7 +125,7 @@ class PaymentsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,  $id)
+    public function update(Request $request, $id)
     {
         try {
             //Validate Form
@@ -141,19 +139,19 @@ class PaymentsController extends Controller
                 'receipt' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
                 'date' => 'required|date',
             ]);
-    
+
             //Get Product by ID
             $payment = Payments::findOrFail($id);
-    
+
             //Check if Image is Uploaded
-            if ($request -> hasFile('receipt')) {
+            if ($request->hasFile('receipt')) {
                 //Upload New Image
                 $receipt = $request->file('receipt');
-                $receipt->storeAs('public/images', $receipt->hashName());
-    
+                $receipt->storeAs('public/receipts', $receipt->hashName());
+
                 //Delete Old Image
-                Storage::delete('public/images'.$payment->receipt);
-    
+                Storage::delete('public/receipts' . $payment->receipt);
+
                 //Update Product with new Image
                 $payment->update([
                     'user_id' => $request->user_id,
@@ -177,19 +175,19 @@ class PaymentsController extends Controller
                     'date' => $request->date,
                 ]);
             }
-            
+
             return response()->json([
                 'success' => true,
                 'message' => 'Payment updated successfully',
                 'data' => $payment,
             ], 200);
-            
+
         } catch (\Exception $e) {
             return response()->json([
-                'success' =>false,
+                'success' => false,
                 'message' => 'Failed to update payment',
                 'error' => $e->getMessage(),
-            ],500);
+            ], 500);
         }
     }
 
