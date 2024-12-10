@@ -14,11 +14,9 @@ class Payments extends Model
         "booking_id",
         "total_payment",
         "payment_method",
-        "end_time", 
         "status",
         "order_id",
         "receipt",
-        "date"
     ];
 
     public function user()
