@@ -1,0 +1,68 @@
+name: Laravel Deployment Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy Laravel Project
+    runs-on: ubuntu-20.04
+
+    steps:
+      # 1. Checkout Code
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      # 2. Setup PHP Environment
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.4
+          extensions: mbstring, bcmath, intl, pdo, pdo_mysql
+          ini-values: post_max_size=256M, upload_max_filesize=256M
+          tools: composer
+
+      # 3. Install Composer Dependencies
+      - name: Install Composer Dependencies
+        run: composer install --optimize-autoloader --no-dev
+
+      # 4. Setup Node.js Environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
+      # 5. Install NPM Dependencies
+      - name: Install NPM Dependencies
+        run: npm install
+
+      # 6. Build Frontend Assets
+      - name: Build Frontend Assets
+        run: npm run build
+
+      # 7. Synchronize Files to Server
+      - name: Deploy to VPS
+        uses: easingthemes/ssh-deploy@v2.1.5
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SOURCE: "."
+          REMOTE_HOST: ${{ secrets.VPS_HOST }}
+          REMOTE_USER: ${{ secrets.VPS_USER }}
+          TARGET: "/var/www/html/arena-connect_api"
+          ARGS: "-rltgoDzv --progress"
+
+      # 8. Run Remote Artisan Commands
+      - name: Run Laravel Commands on Server
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /var/www/html/arena-connect_api
+            php artisan migrate --force
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache

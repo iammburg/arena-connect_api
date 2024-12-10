@@ -47,3 +47,4 @@ Route::resource('bookings', BookingController::class);
 
 //bukti Show payments
 Route::get('payments/{id}', [PaymentsController::class, 'show']);
+Route::resource('/users', AuthController::class);
