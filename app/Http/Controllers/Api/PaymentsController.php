@@ -68,26 +68,38 @@ class PaymentsController extends Controller
             'receipt' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        //UPLOAD Image
-        $receipt = $request->file('receipt');
-        $receipt->storeAs('public/receipts', $receipt->hashName());
+        //Check if Image is Uploaded
+        if ($request->hasFile('receipt')) {
+            //Upload Image
+            $receipt = $request->file('receipt');
+            $receipt->storeAs('public/receipts', $receipt->hashName());
 
-        //Create Payments
-        Payments::create([
-            'user_id' => $request->user_id,
-            'booking_id' => $request->booking_id,
-            'total_payment' => $request->total_payment,
-            'payment_method' => $request->payment_method,
-            'status' => $request->status,
-            'order_id' => $request->order_id,
-            'receipt' => $receipt->hashName(),
-        ]);
-        $payments = Payments::all();
+            //Create Payments with Image
+            $payment = Payments::create([
+                'user_id' => $request->user_id,
+                'booking_id' => $request->booking_id,
+                'total_payment' => $request->total_payment,
+                'payment_method' => $request->payment_method,
+                'status' => $request->status,
+                'order_id' => $request->order_id,
+                'receipt' => $receipt->hashName(),
+            ]);
+        } else {
+            //Create Payments without Image
+            $payment = Payments::create([
+                'user_id' => $request->user_id,
+                'booking_id' => $request->booking_id,
+                'total_payment' => $request->total_payment,
+                'payment_method' => $request->payment_method,
+                'status' => $request->status,
+                'order_id' => $request->order_id,
+            ]);
+        }
 
         return response()->json([
             'success' => true,
             'message' => 'Add new Payments successfully',
-            'data' => $payments,
+            'data' => $payment,
         ], 201);
     }
 
@@ -150,7 +162,6 @@ class PaymentsController extends Controller
                 'status' => 'required',
                 'order_id' => 'required|numeric|min:0',
                 'receipt' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'date' => 'required|date',
             ]);
 
             //Get Product by ID
@@ -163,7 +174,7 @@ class PaymentsController extends Controller
                 $receipt->storeAs('public/receipts', $receipt->hashName());
 
                 //Delete Old Image
-                Storage::delete('public/receipts' . $payment->receipt);
+                Storage::delete("public/receipts/{$payment->receipt}");
 
                 //Update Product with new Image
                 $payment->update([
@@ -174,7 +185,6 @@ class PaymentsController extends Controller
                     'status' => $request->status,
                     'order_id' => $request->order_id,
                     'receipt' => $receipt->hashName(),
-                    'date' => $request->date,
                 ]);
             } else {
                 //Update Payment without Image
@@ -185,7 +195,6 @@ class PaymentsController extends Controller
                     'payment_method' => $request->payment_method,
                     'status' => $request->status,
                     'order_id' => $request->order_id,
-                    'date' => $request->date,
                 ]);
             }
 
