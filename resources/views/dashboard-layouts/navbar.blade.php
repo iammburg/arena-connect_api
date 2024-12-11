@@ -4,7 +4,7 @@
 <div class="nav-header">
     <div class="brand-logo">
         <a href="index.html">
-            <b class="logo-abbr"><img src="{{ asset('assets/images/arena-connect1.png') }}" alt="Logo Arena Connect"> </b>
+            <!-- <b class="logo-abbr"><img src="{{ asset('/assets/images/arena-connect1.png') }}" alt="Logo Arena Connect"> </b> -->
             <span class="logo-compact"><img src="{{ asset('admin-assets/images/logo-compact.png') }}"
                     alt=""></span>
             <span class="brand-title">

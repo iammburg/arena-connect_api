@@ -206,7 +206,6 @@
                                             </p>
                                         </div>
                                         <p class="d-flex mb-0 d-block"><a href="#"
-                                                class="btn btn-primary py-2 mr-1">Booking</a> <a href="#"
                                                 class="btn btn-secondary py-2 ml-1">Detail</a></p>
                                     </div>
                                 </div>
@@ -313,42 +312,51 @@
                     <h2 class="mb-3">Layanan Terbaru Kami</h2>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-3">
+            <div class="row justify-content-center">
+                <div class="col-md-3 d-flex justify-content-center">
                     <div class="services services-2 w-100 text-center">
-                        <div class="icon d-flex align-items-center justify-content-center"><span
-                                class="flaticon-wedding-car"></span></div>
+                        <div class="icon d-flex align-items-center justify-content-center">
+                            <img src="/assets/images/booking.png" alt="Booking Icon" 
+                                style="width: 55px; height: auto; filter: brightness(0) invert(1);">
+                        </div>
                         <div class="text w-100">
                             <h3 class="heading mb-2">Booking Lapangan Online</h3>
                             <p>Nikmati kemudahan memesan lapangan olahraga favoritmu langsung dari aplikasi. Pilih
-                                lokasi, waktu, dan jenis olahraga yang kamu inginkan, semuanya hanya dalam beberapa
-                                klik.</p>
+                            lokasi, waktu, dan jenis olahraga yang kamu inginkan, semuanya hanya dalam beberapa klik.</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+
+                <div class="col-md-3 d-flex justify-content-center">
                     <div class="services services-2 w-100 text-center">
-                        <div class="icon d-flex align-items-center justify-content-center"><span
-                                class="flaticon-transportation"></span></div>
+                        <div class="icon d-flex align-items-center justify-content-center">
+                            <img src="/assets/images/jadwal.png" alt="Jadwal Icon" 
+                                style="width: 40px; height: auto; filter: brightness(0) invert(1);">
+                        </div>
                         <div class="text w-100">
                             <h3 class="heading mb-2">Informasi Jadwal dan Ketersediaan</h3>
                             <p>Kami menawarkan sistem pembayaran yang cepat, aman, dan mudah. Fokuslah pada permainan,
-                                biarkan kami urus transaksinya!</p>
+                            biarkan kami urus transaksinya!</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+
+                <div class="col-md-3 d-flex justify-content-center">
                     <div class="services services-2 w-100 text-center">
-                        <div class="icon d-flex align-items-center justify-content-center"><span
-                                class="flaticon-car"></span></div>
+                        <div class="icon d-flex align-items-center justify-content-center">
+                            <img src="/assets/images/lapangann.png" alt="Lapangan Icon" 
+                                style="width: 50px; height: auto; filter: brightness(0) invert(1);">
+                        </div>
                         <div class="text w-100">
                             <h3 class="heading mb-2">Rekomendasi Lapangan Terbaik</h3>
                             <p>Bingung memilih? Kami menyediakan rekomendasi lapangan terbaik berdasarkan lokasi, harga,
-                                fasilitas, dan ulasan pengguna.</p>
+                            fasilitas, dan ulasan pengguna.</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3">
+            </div>
+
+                <!-- <div class="col-md-3">
                     <div class="services services-2 w-100 text-center">
                         <div class="icon d-flex align-items-center justify-content-center"><span
                                 class="flaticon-transportation"></span></div>
@@ -358,7 +366,7 @@
                                 regelialia.</p>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </section>
@@ -369,15 +377,15 @@
         <div class="container">
             <div class="row justify-content-end">
                 <div class="col-md-6 heading-section heading-section-white ftco-animate">
-                    <h2 class="mb-3">Do You Want To Earn With Us? So Don't Be Late.</h2>
-                    <a href="#" class="btn btn-primary btn-lg">Become A Driver</a>
+                    <h2 class="mb-3">Want to Live Healthy? So, Don't Forget to Book a Field at Arena Connect.</h2>
+                    <!-- <a href="#" class="btn btn-primary btn-lg">Become A Driver</a> -->
                 </div>
             </div>
         </div>
     </section>
 
 
-    <section class="ftco-section testimony-section bg-light">
+    <!-- <section class="ftco-section testimony-section bg-light">
         <div class="container">
             <div class="row justify-content-center mb-5">
                 <div class="col-md-7 text-center heading-section ftco-animate">
@@ -561,7 +569,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
 
     <footer class="ftco-footer ftco-bg-dark ftco-section">
         <div class="container">
@@ -570,8 +578,7 @@
                     <div class="ftco-footer-widget mb-4">
                         <h2 class="ftco-heading-2"><a href="#" class="logo">Arena<span>Connect</span></a>
                         </h2>
-                        <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia,
-                            there live the blind texts.</p>
+                        <p>Arena Connect is an application that helps you to find, select and book sports fields easily.</p>
                         <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
                             <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
                             <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
@@ -623,12 +630,12 @@
                 <div class="col-md-12 text-center">
 
                     <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                        Copyright &copy;
+                        <!-- Copyright &copy;
                         <script>
                             document.write(new Date().getFullYear());
                         </script> All rights reserved | This template is made with <i
                             class="icon-heart color-danger" aria-hidden="true"></i> by <a href="https://colorlib.com"
-                            target="_blank">Colorlib</a>
+                            target="_blank">Colorlib</a> -->
                         <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
                     </p>
                 </div>
