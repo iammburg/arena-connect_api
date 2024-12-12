@@ -30,7 +30,7 @@ return new class extends Migration
             $table->enum('payment_method', ['BRI','BNI']);
             $table->enum('status', ['belum', 'proses', 'selesai'])->default('belum');
             $table->char('order_id', length: 45);
-            $table->char('receipt', length: 45);
+            $table->json('receipt')->nullable();
             $table->date('date');
             $table->timestamps();
         });

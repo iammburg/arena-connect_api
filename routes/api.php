@@ -40,9 +40,16 @@ Route::resource('field-centres', FieldCentreController::class);
 Route::resource('facilities', FacilityController::class);
 Route::resource('fields', FieldController::class);
 Route::get('/field-centres/{fieldCentreId}/fields', [FieldController::class, 'indexByFieldCentre']);
-Route::resource('payments', PaymentsController::class);
+// Route::resource('payments', PaymentsController::class);
 
 // Untuk Bookings
-Route::resource('bookings', BookingController::class);
+// Route::resource('bookings', BookingController::class);
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::resource('payments', PaymentsController::class);
+    Route::get('/bookings', [BookingController::class, 'index']);
+    Route::post('/bookings', [BookingController::class, 'store']);
+    Route::put('/bookings/{id}/status', [BookingController::class, 'updateStatus']);
+    Route::delete('/bookings/{id}', [BookingController::class, 'destroy']);
+});
 
 Route::resource('/users', AuthController::class);

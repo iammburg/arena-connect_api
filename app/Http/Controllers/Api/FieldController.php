@@ -17,7 +17,7 @@ class FieldController extends Controller
     {
         try {
             // $fields = Field::all();
-            $fields = Field::with('fieldCentre:id,name')->get();
+            $fields = Field::with('fieldCentre:id,name,address,price_from,images')->get();
 
             return response()->json([
                 'success' => true,
