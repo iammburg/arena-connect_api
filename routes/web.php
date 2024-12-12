@@ -32,7 +32,6 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('dashboard')->group(function () {
         Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
         Route::resource('/field-centres', FieldCentreController::class);
-        Route::resource('/field-transactions', TransactionController::class)->only(['index', 'edit', 'update']);
 
     
     });

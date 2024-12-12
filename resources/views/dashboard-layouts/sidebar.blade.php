@@ -39,6 +39,7 @@
 
             <li class="nav-label">Manajemen Transaksi</li>
             <li>
+                <!-- ubah url nya ygy -->
             <a href="{{ url('/dashboard/field-transactions') }}" aria-expanded="false">
                 <img src="/assets/images/transaksi.png" alt="Transaksi Icon" style="width: 18px; height: auto; margin-right: 4px;">
                 <span class="nav-text">Daftar Transaksi</span>

@@ -25,20 +25,15 @@
                         @forelse ($transactions as $transaction)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <!-- Menampilkan nama user dari relasi -->
                                 <td>{{ $transaction->user->name }}</td>
-                                <!-- Menampilkan nama GOR dari relasi -->
                                 <td>{{ $transaction->fieldCentre->name }}</td>
-                                <!-- Menampilkan nama lapangan dari relasi -->
                                 <td>{{ $transaction->field->name }}</td>
                                 <td>{{ $transaction->payment_method }}</td>
                                 <td>{{ $transaction->date }}</td>
                                 <td>{{ $transaction->booking_start }} - {{ $transaction->booking_end }}</td>
                                 <td>{{ $transaction->status }}</td>
                                 <td>
-                                    <!-- Tombol centang untuk status Selesai -->
                                     <button class="btn btn-success btn-sm" onclick="showModal('Selesai', {{ $transaction->id }})">&#10003;</button>
-                                    <!-- Tombol silang untuk status Batal -->
                                     <button class="btn btn-danger btn-sm" onclick="showModal('Batal', {{ $transaction->id }})">&#10007;</button>
                                 </td>
                             </tr>
