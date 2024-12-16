@@ -28,7 +28,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/', function () {
     return response()->json([
         'status' => false,
-        'message' => 'Unauthorized access'
+        'message' => 'Unauthorized access',
     ], 401);
 })->name('login');
 
@@ -48,3 +48,4 @@ Route::resource('bookings', BookingController::class);
 //bukti Show payments
 Route::get('payments/{id}', [PaymentsController::class, 'show']);
 Route::resource('/users', AuthController::class);
+Route::post('payments/{id}', [PaymentsController::class, 'updatePayment']);

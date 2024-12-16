@@ -213,6 +213,71 @@ class PaymentsController extends Controller
         }
     }
 
+    public function updatePayment(Request $request, $id)
+    {
+        try {
+            //Validate Form
+            $request->validate([
+                'user_id' => 'nullable',
+                'booking_id' => 'nullable',
+                'total_payment' => 'required',
+                'payment_method' => 'nullable',
+                'status' => 'nullable',
+                'order_id' => 'nullable|numeric|min:0',
+                'receipt' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+
+            //Get Product by ID
+            $payment = Payments::findOrFail($id);
+
+            //Check if Image is Uploaded
+            if ($request->hasFile('receipt')) {
+                //Upload New Image
+                $receipt = $request->file('receipt');
+                $receipt->storeAs('public/receipts', $receipt->hashName());
+
+                //Delete Old Image
+                Storage::delete("public/receipts/{$payment->receipt}");
+
+                //Update Product with new Image
+                $payment->update([
+                    'user_id' => $request->user_id,
+                    'booking_id' => $request->booking_id,
+                    'total_payment' => $request->total_payment,
+                    'payment_method' => $request->payment_method,
+                    'status' => $request->status,
+                    'order_id' => $request->order_id,
+                    'receipt' => $receipt->hashName(),
+                ]);
+            } else {
+                //Update Payment without Image
+                $payment->update([
+                    'user_id' => $request->user_id,
+                    'booking_id' => $request->booking_id,
+                    'total_payment' => $request->total_payment,
+                    'payment_method' => $request->payment_method,
+                    'status' => $request->status,
+                    'order_id' => $request->order_id,
+                ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Payment updated successfully',
+                'data' => $payment,
+            ], 200);
+
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update payment',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
     /**
      * Remove the specified resource from storage.
      */
