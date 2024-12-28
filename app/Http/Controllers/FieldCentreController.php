@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\FieldCentre;
+use Illuminate\Support\Facades\Auth;
 
 class FieldCentreController extends Controller
 {
@@ -12,17 +13,37 @@ class FieldCentreController extends Controller
      */
     public function index()
     {
-        $field_centres = FieldCentre::with(['facilities' => function ($query) {
-                $query->select('facilities.name');
-            }, 'fields'])->get();
+
+        if (Auth::user()->role == 'Admin Lapangan') {
+            $field_centres = FieldCentre::with([
+                'facilities' => function ($query) {
+                    $query->select('facilities.name');
+                },
+                'fields',
+            ])
+                ->where('user_id', Auth::user()->id)
+                ->get();
+        } else if (Auth::user()->role == 'Admin Aplikasi') {
+            $field_centres = FieldCentre::with([
+                'facilities' => function ($query) {
+                    $query->select('facilities.name');
+                },
+                'fields',
+            ])
+                ->get();
+        }
 
         return view('field-centres.index', compact('field_centres'));
     }
+
     public function landingPage()
     {
-        $field_centres = FieldCentre::with(['facilities' => function ($query) {
+        $field_centres = FieldCentre::with([
+            'facilities' => function ($query) {
                 $query->select('facilities.name');
-            }, 'fields'])->get();
+            },
+            'fields',
+        ])->get();
 
         return view('index', compact('field_centres'));
     }

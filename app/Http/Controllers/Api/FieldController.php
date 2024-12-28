@@ -38,7 +38,7 @@ class FieldController extends Controller
                 ->with([
                     'prices:id,field_id,price_from,price_to',
                     'schedules:id,field_id,date,start_time,end_time,is_booked',
-                    'fieldCentre:name,id'
+                    'fieldCentre:name,id',
                 ])
                 ->get();
 

@@ -667,6 +667,17 @@
     <script src="{{ asset('assets/js/google-map.js') }}"></script>
     <script src="{{ asset('assets/js/main.js') }}"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        @if (session('error'))
+            Swal.fire({
+                icon: "error",
+                title: "Gak Boleh, Nih! 😢",
+                text: "{{ session('error') }}",
+                // footer: '<a href="#">Why do I have this issue?</a>'
+            });
+        @endif
+    </script>
 </body>
 
 </html>

@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="./plugins/chartist-plugin-tooltips/css/chartist-plugin-tooltip.css">
     <!-- Custom Stylesheet -->
     <link href="{{ asset('admin-assets/css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('admin-assets/plugins/tables/css/datatable/dataTables.bootstrap4.min.css') }}"
+        rel="stylesheet">
 
     {{-- Font Awesome --}}
     <link href="{{ asset('assets/fontawesome-free-6.7.1-web/css/fontawesome.css') }}" rel="stylesheet" />
@@ -120,6 +122,9 @@
 
 
     <script src="{{ asset('admin-assets/js/dashboard/dashboard-1.js') }}"></script>
+    <script src="{{ asset('admin-assets/plugins/tables/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('admin-assets/plugins/tables/js/datatable/dataTables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('admin-assets/plugins/tables/js/datatable-init/datatable-basic.min.js') }}"></script>
 
 </body>
 

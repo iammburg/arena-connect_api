@@ -22,10 +22,6 @@ return new class extends Migration
                 ->nullable()
                 ->constrained('bookings')
                 ->cascadeOnUpdate();
-            // $table->foreignId('sparring_id')
-            //     ->nullable()
-            //     ->constrained('sparring')
-            //     ->cascadeOnUpdate();
             $table->decimal('total_payment');
             $table->enum('payment_method', ['BRI','BNI']);
             $table->enum('status', ['belum', 'proses', 'selesai'])->default('belum');

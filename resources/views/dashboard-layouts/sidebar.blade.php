@@ -1,42 +1,61 @@
 <div class="nk-sidebar">
     <div class="nk-nav-scroll">
         <ul class="metismenu" id="menu">
-            <li class="nav-label">Dashboard</li>
+            <li class="nav-label">Menu Dashboard</li>
             <li>
-                <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                <a class="" href="{{ url('/') }}" aria-expanded="false">
                     <i class="fa-solid fa-gauge-high"></i><span class="nav-text">Dashboard</span>
                 </a>
-                <ul aria-expanded="false">
-                    <li><a href="{{ url('/') }}">Landing Page</a></li>
-                    <!-- <li><a href="./index-2.html">Home 2</a></li> -->
-                </ul>
+                {{-- <ul aria-expanded="false">
+                    <li><a href="{{ url('/') }}">Landing Page</a></li> --}}
+                <!-- <li><a href="./index-2.html">Home 2</a></li> -->
+                {{-- </ul> --}}
             </li>
-            {{-- <li class="mega-menu mega-menu-sm">
-                <a class="has-arrow" href="javascript:void()" aria-expanded="false">
-                    <i class="icon-globe-alt menu-icon"></i><span class="nav-text">Layouts</span>
-                </a>
-                <ul aria-expanded="false">
-                    <li><a href="./layout-blank.html">Blank</a></li>
-                    <li><a href="./layout-one-column.html">One Column</a></li>
-                    <li><a href="./layout-two-column.html">Two column</a></li>
-                    <li><a href="./layout-compact-nav.html">Compact Nav</a></li>
-                    <li><a href="./layout-vertical.html">Vertical</a></li>
-                    <li><a href="./layout-horizontal.html">Horizontal</a></li>
-                    <li><a href="./layout-boxed.html">Boxed</a></li>
-                    <li><a href="./layout-wide.html">Wide</a></li>
+            @if (Auth::user()->role == 'Admin Aplikasi')
+                <li class="nav-label">Manajemen Pengguna</li>
+                <li>
+                    <a href="{{ url('/dashboard/users') }}" aria-expanded="false">
+                        <i class="fa-solid fa-user menu-icon"></i><span class="nav-text">Daftar User</span>
+                    </a>
+                </li>
+                <li class="nav-label">Manajemen Fasilitas</li>
+                <li>
+                    <a href="{{ url('/dashboard/facilities') }}" aria-expanded="false">
+                        <i class="fa-solid fa-toolbox"></i><span class="nav-text">Daftar Fasilitas</span>
+                    </a>
+                </li>
+            @endif
+            @if (Auth::user()->role == 'Admin Lapangan' || Auth::user()->role == 'Admin Aplikasi')
+                <li class="nav-label">Menu Lapangan</li>
+                {{-- <li>
+                    <a href="{{ url('/dashboard/field-centres') }}" aria-expanded="false">
+                        <i class="fa-solid fa-futbol menu-icon"></i><span class="nav-text">Pusat Olahraga</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url('/dashboard/fields') }}" aria-expanded="false">
+                        <i class="fa-solid fa-futbol menu-icon"></i><span class="nav-text">Lapangan Olahraga</span>
+                    </a>
+                </li> --}}
 
-
-                    <li><a href="./layout-fixed-header.html">Fixed Header</a></li>
-                    <li><a href="layout-fixed-sidebar.html">Fixed Sidebar</a></li>
-                </ul>
-            </li> --}}
-            <li class="nav-label">Manajemen Lapangan</li>
-            <li>
-                <a href="{{ url('/dashboard/field-centres') }}" aria-expanded="false">
-                    <i class="fa-solid fa-futbol menu-icon"></i></i><span class="nav-text">Pusat Olahraga</span>
-                </a>
-            </li>
-
+                <li class="mega-menu mega-menu-sm">
+                    <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                        <i class="fa-solid fa-futbol menu-icon"></i><span class="nav-text">Manajemen Lapangan</span>
+                    </a>
+                    <ul aria-expanded="false">
+                        <li><a href="{{ url('/dashboard/field-centres') }}">Pusat Olahraga</a></li>
+                        <li><a href="{{ url('/dashboard/fields') }}">Lapangan Olahraga</a></li>
+                    </ul>
+                </li>
+            @endif
+            @if (Auth::user()->role == 'Admin Lapangan')
+                <li class="nav-label">Manajemen Jadwal</li>
+                <li>
+                    <a href="{{ url('/dashboard/field-price-schedules') }}" aria-expanded="false">
+                        <i class="fa-solid fa-clock"></i><span class="nav-text">Jadwal & Harga Lapangan</span>
+                    </a>
+                </li>
+            @endif
         </ul>
     </div>
 </div>
