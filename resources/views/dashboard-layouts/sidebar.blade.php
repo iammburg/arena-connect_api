@@ -48,7 +48,7 @@
                     </ul>
                 </li>
             @endif
-            @if (Auth::user()->role == 'Admin Lapangan')
+            @if (Auth::user()->role == 'Admin Lapangan' || Auth::user()->role == 'Admin Aplikasi')
                 <li class="nav-label">Manajemen Jadwal</li>
                 <li>
                     <a href="{{ url('/dashboard/field-price-schedules') }}" aria-expanded="false">

@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
         Route::middleware(['role:Admin Lapangan,Admin Aplikasi'])->group(function () {
             Route::resource('/field-centres', FieldCentreController::class);
             Route::resource('/fields', FieldController::class);
+            Route::resource('/field-price-schedules', FieldPriceScheduleController::class);
         });
 
         Route::middleware(['role:Admin Aplikasi'])->group(function () {
@@ -43,8 +44,8 @@ Route::middleware(['auth'])->group(function () {
             Route::resource('/facilities', FacilityController::class);
         });
 
-        Route::middleware(['role:Admin Lapangan'])->group(function () {
-            Route::resource('/field-price-schedules', FieldPriceScheduleController::class);
-        });
+        // Route::middleware(['role:Admin Lapangan'])->group(function () {
+        //     Route::resource('/field-price-schedules', FieldPriceScheduleController::class);
+        // });
     });
 });

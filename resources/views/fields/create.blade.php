@@ -34,7 +34,6 @@
                                             </div>
                                         @enderror
                                     </div>
-
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-form-label" for="field_centre_id">Dari GOR<span
@@ -55,7 +54,6 @@
                                                 {{ $message }}</div>
                                         @enderror
                                     </div>
-
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-form-label" for="type">Tipe Lapangan<span
@@ -75,7 +73,6 @@
                                                 {{ $message }}</div>
                                         @enderror
                                     </div>
-
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-lg-4 col-form-label" for="descriptions">Deskripsi<span
@@ -89,7 +86,6 @@
                                                 {{ $message }}</div>
                                         @enderror
                                     </div>
-
                                 </div>
                                 <input type="hidden" name="status" value="Tersedia">
                                 <div class="form-group row">

@@ -369,8 +369,8 @@
         <div class="container">
             <div class="row justify-content-end">
                 <div class="col-md-6 heading-section heading-section-white ftco-animate">
-                    <h2 class="mb-3">Do You Want To Earn With Us? So Don't Be Late.</h2>
-                    <a href="#" class="btn btn-primary btn-lg">Become A Driver</a>
+                    <h2 class="mb-3">Tertarik Bergabung dengan Kami?</h2>
+                    <a href="#" class="btn btn-primary btn-lg">Gabung Sekarang</a>
                 </div>
             </div>
         </div>
@@ -459,7 +459,7 @@
         </div>
     </section>
 
-    <section class="ftco-section">
+    {{-- <section class="ftco-section">
         <div class="container">
             <div class="row justify-content-center mb-5">
                 <div class="col-md-7 heading-section text-center ftco-animate">
@@ -521,9 +521,9 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
-    <section class="ftco-counter ftco-section img bg-light" id="section-counter">
+    {{-- <section class="ftco-counter ftco-section img bg-light" id="section-counter">
         <div class="overlay"></div>
         <div class="container">
             <div class="row">
@@ -561,7 +561,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> --}}
 
     <footer class="ftco-footer ftco-bg-dark ftco-section">
         <div class="container">
@@ -570,8 +570,9 @@
                     <div class="ftco-footer-widget mb-4">
                         <h2 class="ftco-heading-2"><a href="#" class="logo">Arena<span>Connect</span></a>
                         </h2>
-                        <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia,
-                            there live the blind texts.</p>
+                        <p>Kami menyediakan berbagai pilihan lapangan
+                            olahraga terbaik di lokasi strategis untuk memastikan pengalaman bermain yang menyenangkan
+                            dan terorganisir.</p>
                         <ul class="ftco-footer-social list-unstyled float-md-left float-lft mt-5">
                             <li class="ftco-animate"><a href="#"><span class="icon-twitter"></span></a></li>
                             <li class="ftco-animate"><a href="#"><span class="icon-facebook"></span></a></li>
