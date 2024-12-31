@@ -51,11 +51,11 @@ class FieldController extends Controller
     {
 
         $validated = $request->validate([
-            'name' => 'required',
-            'field_centre_id' => 'required',
-            'type' => 'required',
-            'descriptions' => 'required',
-            'status' => 'required',
+            'name' => 'required|string',
+            'field_centre_id' => 'required|numeric',
+            'type' => 'required|in:Futsal,Badminton',
+            'descriptions' => 'required|string',
+            'status' => 'required|in:Tersedia, Telah dibooking, Dalam perbaikan, Tidak tersedia',
         ]);
 
         try {

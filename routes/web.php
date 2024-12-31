@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\{FieldCentreController, UserController, FacilityController, FieldController, FieldPriceScheduleController};
+use App\Http\Controllers\{FieldCentreController, UserController, FacilityController, FieldController, FieldPriceScheduleController, BankController};
 use Illuminate\Support\Facades\Auth;
 
 
@@ -37,6 +37,7 @@ Route::middleware(['auth'])->group(function () {
             Route::resource('/field-centres', FieldCentreController::class);
             Route::resource('/fields', FieldController::class);
             Route::resource('/field-price-schedules', FieldPriceScheduleController::class);
+            Route::resource('/banks', BankController::class);
         });
 
         Route::middleware(['role:Admin Aplikasi'])->group(function () {

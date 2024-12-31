@@ -36,7 +36,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-lg-4 col-form-label" for="field_centre_id">Dari GOR<span
+                                    <label class="col-lg-4 col-form-label" for="field_centre_id">Untuk GOR<span
                                             class="text-danger">*</span>
                                     </label>
                                     <div class="col-lg-6">

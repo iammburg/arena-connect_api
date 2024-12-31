@@ -32,4 +32,9 @@ class Payments extends Model
     {
         return $this->hasOneThrough(Field::class, Booking::class, 'id', 'id', 'booking_id', 'field_id')->select('fields.id as field_id', 'fields.name');
     }
+
+    public function bank()
+    {
+        return $this->belongsTo(Bank::class, 'payment_id');
+    }
 }

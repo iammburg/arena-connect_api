@@ -205,9 +205,11 @@
                                                 </span>Rp{{ number_format($field_centre->price_from, 0, ',', '.') }}
                                             </p>
                                         </div>
-                                        <p class="d-flex mb-0 d-block"><a href="#"
-                                                class="btn btn-primary py-2 mr-1">Booking</a> <a href="#"
-                                                class="btn btn-secondary py-2 ml-1">Detail</a></p>
+                                        <p class="d-flex mb-0 d-block">
+                                            {{-- <a href="#"
+                                                class="btn btn-primary py-2 mr-1">Booking</a> --}}
+                                            <a href="#" class="btn btn-secondary py-2 ml-1">Detail</a>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
