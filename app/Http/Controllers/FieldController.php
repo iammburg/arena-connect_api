@@ -49,13 +49,12 @@ class FieldController extends Controller
      */
     public function store(Request $request)
     {
-
         $validated = $request->validate([
             'name' => 'required|string',
             'field_centre_id' => 'required|numeric',
             'type' => 'required|in:Futsal,Badminton',
             'descriptions' => 'required|string',
-            'status' => 'required|in:Tersedia, Telah dibooking, Dalam perbaikan, Tidak tersedia',
+            'status' => 'required|boolean', // Changed to boolean validation
         ]);
 
         try {

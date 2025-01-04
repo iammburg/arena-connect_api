@@ -20,7 +20,7 @@ return new class extends Migration
                 ->cascadeOnUpdate();
             $table->enum('type', ['Futsal', 'Badminton']);
             $table->longText("descriptions");
-            $table->enum('status', ['Tersedia', 'Telah dibooking', 'Dalam perbaikan', 'Tidak tersedia']);
+            $table->boolean('status')->default(true); // Changed to boolean, true = available, false = unavailable
             $table->timestamps();
         });
     }
