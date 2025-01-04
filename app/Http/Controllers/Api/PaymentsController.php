@@ -7,6 +7,7 @@ use App\Models\Payments;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Bank;
 
 class PaymentsController extends Controller
 {
@@ -62,7 +63,6 @@ class PaymentsController extends Controller
             'user_id' => 'required',
             'booking_id' => 'required',
             'total_payment' => 'required',
-            'payment_method' => 'required',
             'status' => 'required',
             'order_id' => 'required|numeric|min:0',
             'receipt' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -79,7 +79,6 @@ class PaymentsController extends Controller
                 'user_id' => $request->user_id,
                 'booking_id' => $request->booking_id,
                 'total_payment' => $request->total_payment,
-                'payment_method' => $request->payment_method,
                 'status' => $request->status,
                 'order_id' => $request->order_id,
                 'receipt' => $receipt->hashName(),
@@ -90,7 +89,6 @@ class PaymentsController extends Controller
                 'user_id' => $request->user_id,
                 'booking_id' => $request->booking_id,
                 'total_payment' => $request->total_payment,
-                'payment_method' => $request->payment_method,
                 'status' => $request->status,
                 'order_id' => $request->order_id,
             ]);
@@ -121,6 +119,7 @@ class PaymentsController extends Controller
                     $query->select('id', 'field_id', 'booking_start', 'booking_end', 'date');
                 },
                 'user:id,name,email',
+                'bank:id,bank_name,account_number,field_centre_id',
             ])
                 ->find($id);
             return response()->json([
@@ -155,73 +154,10 @@ class PaymentsController extends Controller
         try {
             //Validate Form
             $request->validate([
-                'user_id' => 'required',
-                'booking_id' => 'required',
-                'total_payment' => 'required',
-                'payment_method' => 'required',
-                'status' => 'required',
-                'order_id' => 'required|numeric|min:0',
-                'receipt' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            ]);
-
-            //Get Product by ID
-            $payment = Payments::findOrFail($id);
-
-            //Check if Image is Uploaded
-            if ($request->hasFile('receipt')) {
-                //Upload New Image
-                $receipt = $request->file('receipt');
-                $receipt->storeAs('public/receipts', $receipt->hashName());
-
-                //Delete Old Image
-                Storage::delete("public/receipts/{$payment->receipt}");
-
-                //Update Product with new Image
-                $payment->update([
-                    'user_id' => $request->user_id,
-                    'booking_id' => $request->booking_id,
-                    'total_payment' => $request->total_payment,
-                    'payment_method' => $request->payment_method,
-                    'status' => $request->status,
-                    'order_id' => $request->order_id,
-                    'receipt' => $receipt->hashName(),
-                ]);
-            } else {
-                //Update Payment without Image
-                $payment->update([
-                    'user_id' => $request->user_id,
-                    'booking_id' => $request->booking_id,
-                    'total_payment' => $request->total_payment,
-                    'payment_method' => $request->payment_method,
-                    'status' => $request->status,
-                    'order_id' => $request->order_id,
-                ]);
-            }
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Payment updated successfully',
-                'data' => $payment,
-            ], 200);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to update payment',
-                'error' => $e->getMessage(),
-            ], 500);
-        }
-    }
-
-    public function updatePayment(Request $request, $id)
-    {
-        try {
-            //Validate Form
-            $request->validate([
                 'user_id' => 'nullable',
                 'booking_id' => 'nullable',
                 'total_payment' => 'required',
-                'payment_method' => 'nullable',
+                'payment_id' => 'required|exists:banks,id',
                 'status' => 'nullable',
                 'order_id' => 'nullable|numeric|min:0',
                 'receipt' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -244,7 +180,7 @@ class PaymentsController extends Controller
                     'user_id' => $request->user_id,
                     'booking_id' => $request->booking_id,
                     'total_payment' => $request->total_payment,
-                    'payment_method' => $request->payment_method,
+                    'payment_id' => $request->payment_id,
                     'status' => $request->status,
                     'order_id' => $request->order_id,
                     'receipt' => $receipt->hashName(),
@@ -255,7 +191,7 @@ class PaymentsController extends Controller
                     'user_id' => $request->user_id,
                     'booking_id' => $request->booking_id,
                     'total_payment' => $request->total_payment,
-                    'payment_method' => $request->payment_method,
+                    'payment_id' => $request->payment_id,
                     'status' => $request->status,
                     'order_id' => $request->order_id,
                 ]);
@@ -277,6 +213,84 @@ class PaymentsController extends Controller
         }
     }
 
+    public function updatePayment(Request $request, $id)
+    {
+        try {
+            //Validate Form
+            $request->validate([
+                'user_id' => 'nullable',
+                'booking_id' => 'nullable',
+                'total_payment' => 'required',
+                'payment_id' => 'required|exists:banks,id',
+                'status' => 'nullable',
+                'order_id' => 'nullable|numeric|min:0',
+                'receipt' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+
+            //Get Product by ID
+            $payment = Payments::findOrFail($id);
+
+            //Check if Image is Uploaded
+            if ($request->hasFile('receipt')) {
+                //Upload New Image
+                $receipt = $request->file('receipt');
+                $receipt->storeAs('public/receipts', $receipt->hashName());
+
+                //Delete Old Image
+                Storage::delete("public/receipts/{$payment->receipt}");
+
+                //Update Product with new Image
+                $payment->update([
+                    'user_id' => $request->user_id,
+                    'booking_id' => $request->booking_id,
+                    'total_payment' => $request->total_payment,
+                    'payment_id' => $request->payment_id,
+                    'status' => $request->status,
+                    'order_id' => $request->order_id,
+                    'receipt' => $receipt->hashName(),
+                ]);
+            } else {
+                //Update Payment without Image
+                $payment->update([
+                    'user_id' => $request->user_id,
+                    'booking_id' => $request->booking_id,
+                    'total_payment' => $request->total_payment,
+                    'payment_id' => $request->payment_id,
+                    'status' => $request->status,
+                    'order_id' => $request->order_id,
+                ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Payment updated successfully',
+                'data' => $payment,
+            ], 200);
+
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update payment',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function getBanksByFieldCentreId($field_centre_id)
+    {
+        $banks = Bank::where('field_centre_id', $field_centre_id)->get();
+
+        if ($banks->isEmpty()) {
+            return response()->json([
+                'message' => 'No banks found for the given field_centre_id',
+            ], 404);
+        }
+
+        return response()->json([
+            'data' => $banks,
+        ], 200);
+    }
 
     /**
      * Remove the specified resource from storage.

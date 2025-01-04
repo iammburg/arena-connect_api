@@ -13,7 +13,7 @@ class Payments extends Model
         "user_id",
         "booking_id",
         "total_payment",
-        "payment_method",
+        "payment_id",
         "status",
         "order_id",
         "receipt",

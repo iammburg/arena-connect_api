@@ -41,7 +41,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::resource('facilities', FacilityController::class);
     Route::resource('fields', FieldController::class);
     Route::get('/field-centres/{fieldCentreId}/fields', [FieldController::class, 'indexByFieldCentre']);
-    Route::resource('payments', PaymentsController::class);
 });
 
 // Buat Bookings
@@ -50,7 +49,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 // Buat Show Payments
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::get('payments/{id}', [PaymentsController::class, 'show']);
     Route::resource('/users', AuthController::class);
+    Route::resource('payments', PaymentsController::class);
+    Route::get('payments/{id}', [PaymentsController::class, 'show']);
     Route::post('payments/{id}', [PaymentsController::class, 'updatePayment']);
+    Route::get('payments/{field_centre_id}/banks', [PaymentsController::class, 'getBanksByFieldCentreId']);
 });
+
+
