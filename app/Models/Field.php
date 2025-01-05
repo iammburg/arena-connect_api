@@ -13,7 +13,7 @@ class Field extends Model
 
     public function fieldCentre()
     {
-        return $this->belongsTo(FieldCentre::class);
+        return $this->belongsTo(FieldCentre::class, 'field_centre_id', 'id');
     }
 
     public function prices()
@@ -28,6 +28,10 @@ class Field extends Model
 
     public function booking()
     {
-        return $this->hasOne(Booking::class);
+        return $this->hasOne(Booking::class, 'field_id');
+    }
+    public function payments()
+    {
+        return $this->hasOne(Payments::class);
     }
 }

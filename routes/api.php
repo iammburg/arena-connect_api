@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\FacilityController;
 use App\Http\Controllers\Api\FieldController;
 use App\Http\Controllers\Api\PaymentsController;
 use App\Models\Payments;
+use Faker\Provider\ar_EG\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -45,11 +46,24 @@ Route::get('/field-centres/{fieldCentreId}/fields', [FieldController::class, 'in
 // Untuk Bookings
 // Route::resource('bookings', BookingController::class);
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::resource('payments', PaymentsController::class);
+    // Route::resource('payments', PaymentsController::class);
     Route::get('/bookings', [BookingController::class, 'index']);
     Route::post('/bookings', [BookingController::class, 'store']);
     Route::put('/bookings/{id}/status', [BookingController::class, 'updateStatus']);
     Route::delete('/bookings/{id}', [BookingController::class, 'destroy']);
 });
 
+//  Untuk Payments
+Route::middleware(['auth:sanctum'])->group(function () {
+    // Route::resource('payments', PaymentsController::class);
+    Route::get('/payments', [PaymentsController::class, 'index']);
+    Route::post('/payments', [PaymentsController::class, 'store']);
+    // Route::put('/payments/{id}', [PaymentsController::class, 'updateStatus']);
+    // Route::delete('/payments/{id}', [PaymentsController::class, 'destroy']);
+});
+
+//bukti Show payments
+Route::put('/payments/{id}', [PaymentsController::class, 'updateStatus']);
+Route::get('/total-revenue',[PaymentsController::class, 'getTotalRevenue']);
+// Route::get('payments/{id}', [PaymentsController::class, 'show']);
 Route::resource('/users', AuthController::class);
