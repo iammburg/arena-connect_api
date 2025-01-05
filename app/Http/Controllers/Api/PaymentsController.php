@@ -8,6 +8,7 @@ use Faker\Provider\ar_EG\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Bank;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Controllers\Api\DB;
@@ -94,7 +95,6 @@ class PaymentsController extends Controller
             'user_id' => 'required',
             'booking_id' => 'required',
             'total_payment' => 'required',
-            'payment_method' => 'required',
             'status' => 'required',
             'order_id' => 'required|numeric|min:0',
             'receipt.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -112,47 +112,29 @@ class PaymentsController extends Controller
         $imagePaths = [];
 
         if ($request->hasFile('receipt')) {
-            foreach ($request->file('receipt') as $image) {
-                $path = $image->store('receipt', 'public');
-                $imagePaths[] = url('storage/' . $path);
-            }
+            //Upload Image
+            $receipt = $request->file('receipt');
+            $receipt->storeAs('public/receipts', $receipt->hashName());
+
+            //Create Payments with Image
+            $payment = Payments::create([
+                'user_id' => $request->user_id,
+                'booking_id' => $request->booking_id,
+                'total_payment' => $request->total_payment,
+                'status' => $request->status,
+                'order_id' => $request->order_id,
+                'receipt' => $receipt->hashName(),
+            ]);
+        } else {
+            //Create Payments without Image
+            $payment = Payments::create([
+                'user_id' => $request->user_id,
+                'booking_id' => $request->booking_id,
+                'total_payment' => $request->total_payment,
+                'status' => $request->status,
+                'order_id' => $request->order_id,
+            ]);
         }
-
-        $add_payments->user_id = $request->user_id;
-        $add_payments->booking_id = $request->booking_id;
-        $add_payments->total_payment = $request->total_payment;
-        $add_payments->payment_method = $request->payment_method;
-        $add_payments->status = $request->status;
-        $add_payments->order_id = $request->order_id;
-        $add_payments->receipt = json_encode($imagePaths, JSON_UNESCAPED_SLASHES);
-
-        $add_payments->save();
-        // //Validate Form
-        // $request->validate([
-        //     'user_id' => 'required',
-        //     'booking_id' => 'required',
-        //     'total_payment' => 'required',
-        //     'payment_method' => 'required',
-        //     'status' => 'required',
-        //     'order_id' => 'required|numeric|min:0',
-        //     'receipt.*' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        // ]);
-
-        // //UPLOAD Image
-        // $receipt = $request->file('receipt');
-        // $receipt->storeAs('public/receipts', $receipt->hashName());
-
-        // //Create Payments
-        // Payments::create([
-        //     'user_id' => $request->user_id,
-        //     'booking_id' => $request->booking_id,
-        //     'total_payment' => $request->total_payment,
-        //     'payment_method' => $request->payment_method,
-        //     'status' => $request->status,
-        //     'order_id' => $request->order_id,
-        //     'receipt' => $receipt->hashName(),
-        // ]);
-        // $payments = Payments::all();
 
         return response()->json([
             'success' => true,
@@ -227,6 +209,7 @@ class PaymentsController extends Controller
                     $query->select('id', 'field_id', 'booking_start', 'booking_end', 'date');
                 },
                 'user:id,name,email',
+                'bank:id,bank_name,account_number,field_centre_id',
             ])
                 ->find($id);
             return response()->json([
@@ -259,8 +242,116 @@ class PaymentsController extends Controller
     public function update(Request $request, $id)
     {
         try {
+            //Validate Form
+            $request->validate([
+                'user_id' => 'nullable',
+                'booking_id' => 'nullable',
+                'total_payment' => 'required',
+                'payment_id' => 'required|exists:banks,id',
+                'status' => 'nullable',
+                'order_id' => 'nullable|numeric|min:0',
+                'receipt' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+
+            //Get Product by ID
+            $payment = Payments::findOrFail($id);
+
+            //Check if Image is Uploaded
+            if ($request->hasFile('receipt')) {
+                //Upload New Image
+                $receipt = $request->file('receipt');
+                $receipt->storeAs('public/receipts', $receipt->hashName());
+
+                //Delete Old Image
+                Storage::delete("public/receipts/{$payment->receipt}");
+
+                //Update Product with new Image
+                $payment->update([
+                    'user_id' => $request->user_id,
+                    'booking_id' => $request->booking_id,
+                    'total_payment' => $request->total_payment,
+                    'payment_id' => $request->payment_id,
+                    'status' => $request->status,
+                    'order_id' => $request->order_id,
+                    'receipt' => $receipt->hashName(),
+                ]);
+            } else {
+                //Update Payment without Image
+                $payment->update([
+                    'user_id' => $request->user_id,
+                    'booking_id' => $request->booking_id,
+                    'total_payment' => $request->total_payment,
+                    'payment_id' => $request->payment_id,
+                    'status' => $request->status,
+                    'order_id' => $request->order_id,
+                ]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Payment updated successfully',
+                'data' => $payment,
+            ], 200);
+
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update payment',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function updatePayment(Request $request, $id)
+    {
+        try {
+            //Validate Form
+            $request->validate([
+                'user_id' => 'nullable',
+                'booking_id' => 'nullable',
+                'total_payment' => 'required',
+                'payment_id' => 'required|exists:banks,id',
+                'status' => 'nullable',
+                'order_id' => 'nullable|numeric|min:0',
+                'receipt' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            ]);
+
+            //Get Product by ID
             // Dapatkan data payment berdasarkan ID
             $payment = Payments::findOrFail($id);
+
+            //Check if Image is Uploaded
+            if ($request->hasFile('receipt')) {
+                //Upload New Image
+                $receipt = $request->file('receipt');
+                $receipt->storeAs('public/receipts', $receipt->hashName());
+
+                //Delete Old Image
+                Storage::delete("public/receipts/{$payment->receipt}");
+
+                //Update Product with new Image
+                $payment->update([
+                    'user_id' => $request->user_id,
+                    'booking_id' => $request->booking_id,
+                    'total_payment' => $request->total_payment,
+                    'payment_id' => $request->payment_id,
+                    'status' => $request->status,
+                    'order_id' => $request->order_id,
+                    'receipt' => $receipt->hashName(),
+                ]);
+            } else {
+                //Update Payment without Image
+                $payment->update([
+                    'user_id' => $request->user_id,
+                    'booking_id' => $request->booking_id,
+                    'total_payment' => $request->total_payment,
+                    'payment_id' => $request->payment_id,
+                    'status' => $request->status,
+                    'order_id' => $request->order_id,
+                ]);
+            }
+
             $payments = Payments::with(['user', 'field.fieldCentre', 'booking'])->get();
     
             // Ambil input dan validasi hanya field yang ada
@@ -283,7 +374,8 @@ class PaymentsController extends Controller
                 'message' => 'Payment updated successfully',
                 'data' => $payment,
             ], 200);
-    
+
+
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -291,137 +383,22 @@ class PaymentsController extends Controller
                 'error' => $e->getMessage(),
             ], 500);
         }
-        // try {
-        //     //Validate Form
-        //     $request->validate([
-        //         'user_id' => 'required',
-        //         'booking_id' => 'required',
-        //         'total_payment' => 'required',
-        //         'payment_method' => 'required',
-        //         'status' => 'required',
-        //         'order_id' => 'required|numeric|min:0',
-        //         'receipt' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        //     ]);
-
-        //     //Get Product by ID
-        //     $payment = Payments::findOrFail($id);
-
-        //     //Check if Image is Uploaded
-        //     if ($request->hasFile('receipt')) {
-        //         //Upload New Image
-        //         $receipt = $request->file('receipt');
-        //         $receipt->storeAs('public/receipts', $receipt->hashName());
-
-        //         //Delete Old Image
-        //         Storage::delete("public/receipts/{$payment->receipt}");
-
-        //         //Update Product with new Image
-        //         $payment->update([
-        //             'user_id' => $request->user_id,
-        //             'booking_id' => $request->booking_id,
-        //             'total_payment' => $request->total_payment,
-        //             'payment_method' => $request->payment_method,
-        //             'status' => $request->status,
-        //             'order_id' => $request->order_id,
-        //             'receipt' => $receipt->hashName(),
-        //         ]);
-        //     } else {
-        //         //Update Payment without Image
-        //         $payment->update([
-        //             'user_id' => $request->user_id,
-        //             'booking_id' => $request->booking_id,
-        //             'total_payment' => $request->total_payment,
-        //             'payment_method' => $request->payment_method,
-        //             'status' => $request->status,
-        //             'order_id' => $request->order_id,
-        //         ]);
-        //     }
-
-        //     return response()->json([
-        //         'success' => true,
-        //         'message' => 'Payment updated successfully',
-        //         'data' => $payment,
-        //     ], 200);
-
-        // } catch (\Exception $e) {
-        //     return response()->json([
-        //         'success' => false,
-        //         'message' => 'Failed to update payment',
-        //         'error' => $e->getMessage(),
-        //     ], 500);
-        // }
     }
 
-    public function updateStatus(Request $request, $id)
-{
-    try {
-        // Validasi data
-        $validator = Validator::make($request->all(), [
-            'status' => 'required|string|max:255', // Add specific allowed statuses
-        ]);
+    public function getBanksByFieldCentreId($field_centre_id)
+    {
+        $banks = Bank::where('field_centre_id', $field_centre_id)->get();
 
-        // Jika validasi gagal, kembalikan error
-        if ($validator->fails()) {
+        if ($banks->isEmpty()) {
             return response()->json([
-                'message' => 'Validation failed',
-                'errors' => $validator->errors()
-            ], 422);
+                'message' => 'No banks found for the given field_centre_id',
+            ], 404);
         }
 
-        // Temukan payment berdasarkan ID
-        $payment = Payments::findOrFail($id);
-
-        // Update status
-        $payment->status = $request->input('status');
-        $payment->save();
-
-        // Muat relasi yang mungkin diperlukan
-        $payment->load('user', 'field', 'booking');
-
-        // Berikan respons
         return response()->json([
-            'message' => 'Payment updated successfully',
-            'data' => $payment
+            'data' => $banks,
         ], 200);
-    } catch (ModelNotFoundException $e) {
-        // Tangani jika payment tidak ditemukan
-        return response()->json([
-            'message' => 'Payment not found',
-            'error' => $e->getMessage()
-        ], 404);
-    } catch (\Exception $e) {
-        // Tangani error umum
-        return response()->json([
-            'message' => 'Error updating payment',
-            'error' => $e->getMessage()
-        ], 500);
     }
-}
-
-public function getTotalRevenue()
-{
-    // Validasi dan keamanan tambahan
-    try {
-        // Menggunakan model Payments untuk perhitungan total
-        $totalRevenue = Payments::where('status','selesai')->sum('total_payment');
-        $totalTransaksi = Payments::where('status', 'selesai')->count();
-
-        // Mengembalikan response JSON dengan status sukses
-        return response()->json([
-            'status' => 'success',
-            'total_revenue' => $totalRevenue,
-            'total_transaksi' => $totalTransaksi,
-        ], 200);
-    } catch (\Exception $e) {
-        // Menangani kesalahan jika terjadi
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Failed to fetch total revenue',
-            'error' => $e->getMessage(),
-        ], 500);
-    }
-}
-
 
     /**
      * Remove the specified resource from storage.

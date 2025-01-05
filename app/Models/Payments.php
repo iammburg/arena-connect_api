@@ -13,7 +13,7 @@ class Payments extends Model
         "user_id",
         "booking_id",
         "total_payment",
-        "payment_method",
+        "payment_id",
         "status",
         "order_id",
         "receipt",
@@ -32,5 +32,10 @@ class Payments extends Model
     public function field()
     {
         return $this->hasOneThrough(Field::class, Booking::class, 'id', 'id', 'booking_id', 'field_id')->select('fields.id as field_id', 'fields.name');
+    }
+
+    public function bank()
+    {
+        return $this->belongsTo(Bank::class, 'payment_id');
     }
 }

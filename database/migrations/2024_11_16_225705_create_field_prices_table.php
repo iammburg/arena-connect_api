@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('field_prices', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('field_id')->constrained('fields')->onDelete('cascade'); // Foreign Key ke tabel fields
+            $table->foreignId('field_id')->constrained('fields')->onDelete('cascade');
             $table->decimal('price_from', 8, 2);
             $table->decimal('price_to', 8, 2);
             $table->timestamps();

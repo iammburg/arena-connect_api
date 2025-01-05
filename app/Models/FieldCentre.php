@@ -19,9 +19,15 @@ class FieldCentre extends Model
     {
         return $this->belongsToMany(Facility::class, 'field_centre_facility');
     }
-    
+
     public function fields()
     {
         return $this->hasMany(Field::class);
     }
+
+    public function banks()
+    {
+        return $this->hasMany(Bank::class, 'field_centre_id');
+    }
+
 }

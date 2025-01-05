@@ -2,13 +2,13 @@
             Nav header start
         ***********************************-->
 <div class="nav-header">
-    <div class="brand-logo">
-        <a href="index.html">
+    <div class="brand-logo d-flex justify-content-center align-items-center">
+        <a href="{{ url('/') }}">
             <b class="logo-abbr"><img src="{{ asset('assets/images/arena-connect1.png') }}" alt="Logo Arena Connect"> </b>
-            <span class="logo-compact"><img src="{{ asset('admin-assets/images/logo-compact.png') }}"
-                    alt=""></span>
+            <span class="logo-compact"><img src="{{ asset('assets/images/arena-connect1.png') }}" alt=""></span>
             <span class="brand-title">
-                <img src="{{ asset('admin-assets/images/logo-text.png') }}" alt="">
+                <img src="{{ asset('assets/images/arena-connect2.png') }}" alt="Logo Arena Connect" height="30px"
+                    width="auto">
             </span>
         </a>
     </div>
@@ -170,7 +170,7 @@
                 <li class="icons dropdown d-none d-md-flex">
                     <a href="" class="log-user" data-toggle="dropdown">
                         {{-- <span>English</span> <i class="fa fa-angle-down f-s-14" aria-hidden="true"></i> --}}
-                        <span>Halo!, {{ Auth::user()->name }}</span>
+                        <span>Halo, {{ Auth::user()->name }}!</span>
 
                     </a>
                     {{-- <div class="drop-down dropdown-language animated fadeIn  dropdown-menu">
