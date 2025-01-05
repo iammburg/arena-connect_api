@@ -198,6 +198,7 @@ class PaymentsController extends Controller
         // Menggunakan model Payments untuk perhitungan total
         $totalRevenue = Payments::where('status','selesai')->sum('total_payment');
         $totalTransaksi = Payments::where('status', 'selesai')->count();
+        
 
         // Mengembalikan response JSON dengan status sukses
         return response()->json([
