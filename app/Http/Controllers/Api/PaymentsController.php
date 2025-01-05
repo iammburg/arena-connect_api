@@ -30,7 +30,7 @@ class PaymentsController extends Controller
                     ->get();   
             } elseif (Auth::user()->role === 'Admin Lapangan') {
                 // Ambil booking melalui field_centres yang dikelola user
-                $payments = Payments::with(['field', 'user', 'booking'])
+                $payments = Payments::with(['field', 'user', 'booking', 'banks'])
                     ->whereHas('field.fieldCentre', function($query) {
                         $query->where('user_id', Auth::user()->id);
                     })
@@ -38,7 +38,7 @@ class PaymentsController extends Controller
                     ->get();
             } elseif (Auth::user()->role === 'Admin Aplikasi') {
                 // Admin Aplikasi melihat semua booking
-                $payments = Payments::with(['field', 'user', 'booking'])
+                $payments = Payments::with(['field', 'user', 'booking', 'banks'])
                     ->latest()
                     ->get();
             } else {
