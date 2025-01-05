@@ -329,6 +329,52 @@ class PaymentsController extends Controller
         }
     }
 
+    public function updateStatus(Request $request, $id)
+{
+    try {
+        // Validasi data
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|string|max:255', // Add specific allowed statuses
+        ]);
+
+        // Jika validasi gagal, kembalikan error
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        // Temukan payment berdasarkan ID
+        $payment = Payments::findOrFail($id);
+
+        // Update status
+        $payment->status = $request->input('status');
+        $payment->save();
+
+        // Muat relasi yang mungkin diperlukan
+        $payment->load('user', 'field', 'booking');
+
+        // Berikan respons
+        return response()->json([
+            'message' => 'Payment updated successfully',
+            'data' => $payment
+        ], 200);
+    } catch (ModelNotFoundException $e) {
+        // Tangani jika payment tidak ditemukan
+        return response()->json([
+            'message' => 'Payment not found',
+            'error' => $e->getMessage()
+        ], 404);
+    } catch (\Exception $e) {
+        // Tangani error umum
+        return response()->json([
+            'message' => 'Error updating payment',
+            'error' => $e->getMessage()
+        ], 500);
+    }
+}
+
     public function updatePayment(Request $request, $id)
     {
         try {
