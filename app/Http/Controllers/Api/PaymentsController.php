@@ -29,6 +29,7 @@ class PaymentsController extends Controller
                     $query->select('id', 'field_id', 'booking_start', 'booking_end', 'date');
                 },
                 'user:id,name,email',
+                'bank:id,bank_name,account_number,field_centre_id',
             ])->get();
 
             return response()->json([
@@ -290,6 +291,31 @@ class PaymentsController extends Controller
         return response()->json([
             'data' => $banks,
         ], 200);
+    }
+
+    public function getTotalRevenue()
+    {
+        // Validasi dan keamanan tambahan
+        try {
+            // Menggunakan model Payments untuk perhitungan total
+            $totalRevenue = Payments::where('status', 'selesai')->sum('total_payment');
+            $totalTransaksi = Payments::where('status', 'selesai')->count();
+
+
+            // Mengembalikan response JSON dengan status sukses
+            return response()->json([
+                'status' => 'success',
+                'total_revenue' => $totalRevenue,
+                'total_transaksi' => $totalTransaksi,
+            ], 200);
+        } catch (\Exception $e) {
+            // Menangani kesalahan jika terjadi
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to fetch total revenue',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
