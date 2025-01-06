@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Bank;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class PaymentsController extends Controller
 {
@@ -313,6 +314,52 @@ class PaymentsController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to fetch total revenue',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        try {
+            // Validasi data
+            $validator = Validator::make($request->all(), [
+                'status' => 'required|string|max:255', // Add specific allowed statuses
+            ]);
+
+            // Jika validasi gagal, kembalikan error
+            if ($validator->fails()) {
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors(),
+                ], 422);
+            }
+
+            // Temukan payment berdasarkan ID
+            $payment = Payments::findOrFail($id);
+
+            // Update status
+            $payment->status = $request->input('status');
+            $payment->save();
+
+            // Muat relasi yang mungkin diperlukan
+            $payment->load('user', 'field', 'booking', 'bank');
+
+            // Berikan respons
+            return response()->json([
+                'message' => 'Payment updated successfully',
+                'data' => $payment,
+            ], 200);
+        } catch (ModelNotFoundException $e) {
+            // Tangani jika payment tidak ditemukan
+            return response()->json([
+                'message' => 'Payment not found',
+                'error' => $e->getMessage(),
+            ], 404);
+        } catch (\Exception $e) {
+            // Tangani error umum
+            return response()->json([
+                'message' => 'Error updating payment',
                 'error' => $e->getMessage(),
             ], 500);
         }
