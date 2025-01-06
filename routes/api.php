@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\FieldCentreController;
 use App\Http\Controllers\Api\FacilityController;
 use App\Http\Controllers\Api\FieldController;
 use App\Http\Controllers\Api\PaymentsController;
+use App\Http\Controllers\Api\BankController;
 use App\Models\Payments;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -64,3 +65,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/bookings', [BookingController::class, 'store']);
     Route::delete('/bookings/{id}', [BookingController::class, 'destroy']);
 });
+
+Route::get('bank/form-data', [BankController::class, 'getFormData']);
+Route::apiResource('bank', BankController::class);
