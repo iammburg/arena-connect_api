@@ -56,4 +56,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('payments/{field_centre_id}/banks', [PaymentsController::class, 'getBanksByFieldCentreId']);
 });
 
+Route::put('/payment-status/{id}', [PaymentsController::class, 'updateStatus']);
+Route::get('/total-revenue', [PaymentsController::class, 'getTotalRevenue']);
 
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/bookings', [BookingController::class, 'index']);
+    Route::post('/bookings', [BookingController::class, 'store']);
+    Route::delete('/bookings/{id}', [BookingController::class, 'destroy']);
+});

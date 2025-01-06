@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Bank;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class PaymentsController extends Controller
 {
@@ -29,6 +30,7 @@ class PaymentsController extends Controller
                     $query->select('id', 'field_id', 'booking_start', 'booking_end', 'date');
                 },
                 'user:id,name,email',
+                'bank:id,bank_name,account_number,field_centre_id',
             ])->get();
 
             return response()->json([
@@ -290,6 +292,77 @@ class PaymentsController extends Controller
         return response()->json([
             'data' => $banks,
         ], 200);
+    }
+
+    public function getTotalRevenue()
+    {
+        // Validasi dan keamanan tambahan
+        try {
+            // Menggunakan model Payments untuk perhitungan total
+            $totalRevenue = Payments::where('status', 'selesai')->sum('total_payment');
+            $totalTransaksi = Payments::where('status', 'selesai')->count();
+
+
+            // Mengembalikan response JSON dengan status sukses
+            return response()->json([
+                'status' => 'success',
+                'total_revenue' => $totalRevenue,
+                'total_transaksi' => $totalTransaksi,
+            ], 200);
+        } catch (\Exception $e) {
+            // Menangani kesalahan jika terjadi
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to fetch total revenue',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        try {
+            // Validasi data
+            $validator = Validator::make($request->all(), [
+                'status' => 'required|string|max:255', // Add specific allowed statuses
+            ]);
+
+            // Jika validasi gagal, kembalikan error
+            if ($validator->fails()) {
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'errors' => $validator->errors(),
+                ], 422);
+            }
+
+            // Temukan payment berdasarkan ID
+            $payment = Payments::findOrFail($id);
+
+            // Update status
+            $payment->status = $request->input('status');
+            $payment->save();
+
+            // Muat relasi yang mungkin diperlukan
+            $payment->load('user', 'field', 'booking', 'bank');
+
+            // Berikan respons
+            return response()->json([
+                'message' => 'Payment updated successfully',
+                'data' => $payment,
+            ], 200);
+        } catch (ModelNotFoundException $e) {
+            // Tangani jika payment tidak ditemukan
+            return response()->json([
+                'message' => 'Payment not found',
+                'error' => $e->getMessage(),
+            ], 404);
+        } catch (\Exception $e) {
+            // Tangani error umum
+            return response()->json([
+                'message' => 'Error updating payment',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 
     /**
