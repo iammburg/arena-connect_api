@@ -53,10 +53,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::resource('payments', PaymentsController::class);
     Route::get('payments/{id}', [PaymentsController::class, 'show']);
     Route::post('payments/{id}', [PaymentsController::class, 'updatePayment']);
-    Route::put('payments/{id}', [PaymentsController::class, 'updateStatus']);
     Route::get('payments/{field_centre_id}/banks', [PaymentsController::class, 'getBanksByFieldCentreId']);
 });
 
+Route::put('/payment-status/{id}', [PaymentsController::class, 'updateStatus']);
 Route::get('/total-revenue', [PaymentsController::class, 'getTotalRevenue']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
