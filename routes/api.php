@@ -55,5 +55,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('payments/{id}', [PaymentsController::class, 'updatePayment']);
     Route::get('payments/{field_centre_id}/banks', [PaymentsController::class, 'getBanksByFieldCentreId']);
 });
-
+Route::get('/total-revenue', [PaymentsController::class, 'getTotalRevenue']);
 
