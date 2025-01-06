@@ -393,13 +393,12 @@
                         <div class="item">
                             <div class="testimony-wrap rounded text-center py-4 pb-5">
                                 <div class="user-img mb-2"
-                                    style="background-image: url({{ asset('assets/images/person_1.jpg') }})">
+                                    style="background-image: url({{ asset('admin-assets/images/user/Might_Guy.png') }})">
                                 </div>
                                 <div class="text pt-4">
-                                    <p class="mb-4">Far far away, behind the word mountains, far from the countries
-                                        Vokalia and Consonantia, there live the blind texts.</p>
-                                    <p class="name">Saul Pria Baik</p>
-                                    <span class="position">Marketing Manager</span>
+                                    <p class="mb-4">SEMANGAT MASA MUDA YANG MEMBARA!</p>
+                                    <p class="name">Might Guy</p>
+                                    <span class="position">Guru Taijutsu Akademi Ninja Konoha</span>
                                 </div>
                             </div>
                         </div>

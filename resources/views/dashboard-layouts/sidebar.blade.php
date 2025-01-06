@@ -42,11 +42,16 @@
                         <i class="fa-solid fa-clock"></i><span class="nav-text">Jadwal & Harga Lapangan</span>
                     </a>
                 </li>
-                <li class="nav-label">Menu Bank (Pembayaran)</li>
+                <li class="nav-label">Menu Bank & Pembayaran</li>
                 <li>
                     <a href="{{ url('/dashboard/banks') }}" aria-expanded="false">
                         <i class="fa-solid fa-money-check-dollar"></i><span class="nav-text">Bank & Metode
                             Pembayaran</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url('/dashboard/payments') }}" aria-expanded="false">
+                        <i class="fa-solid fa-check-to-slot"></i></i><span class="nav-text">Konfirmasi Pembayaran</span>
                     </a>
                 </li>
             @endif

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payments;
+use App\Models\Field;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PaymentController extends Controller
 {
@@ -12,21 +14,44 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $payments = Payments::with([
-            'field' => function ($query) {
-                $query->select('fields.id as field_id', 'fields.name', 'fields.field_centre_id')
-                    ->with([
-                        'fieldCentre:id,name,rating,address',
-                    ]);
-            },
-
-            'booking' => function ($query) {
-                $query->select('id', 'field_id', 'booking_start', 'booking_end', 'date');
-            },
-            'user:id,name,email',
-            'bank:id,bank_name, account_number, field_centre_id, user_id',
-        ])->get();
+        if (Auth::user()->role == 'Admin Aplikasi') {
+            $payments = Payments::with('user', 'booking', 'field', 'bank')->get();
+        } else if (Auth::user()->role == 'Admin Lapangan') {
+            $payments = Payments::with('user', 'booking', 'field', 'bank')->whereHas('booking.field.fieldCentre', function ($query) {
+                $query->where('user_id', Auth::user()->id);
+            })->get();
+        }
         return view('payments.index', compact('payments'));
+    }
+
+    public function approvePayment(Payments $payment)
+    {
+        $payment->update([
+            'status' => 'Selesai',
+        ]);
+
+        $field = Field::find($payment->booking->field_id);
+        $field->update([
+            'status' => 'Telah dibooking',
+        ]);
+
+        return redirect()->route('payments.index')
+            ->with('success', 'Pembayaran berhasil dikonfirmasi');
+    }
+
+    public function rejectPayment(Payments $payment)
+    {
+        $payment->update([
+            'status' => 'Ditolak',
+        ]);
+
+        $field = Field::find($payment->booking->field_id);
+        $field->update([
+            'status' => 'Tersedia',
+        ]);
+
+        return redirect()->route('payments.index')
+            ->with('success', 'Pembayaran telah ditolak');
     }
 
     /**
