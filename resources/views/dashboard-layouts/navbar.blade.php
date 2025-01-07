@@ -170,7 +170,9 @@
                 <li class="icons dropdown d-none d-md-flex">
                     <a href="" class="log-user" data-toggle="dropdown">
                         {{-- <span>English</span> <i class="fa fa-angle-down f-s-14" aria-hidden="true"></i> --}}
-                        <span>Halo, {{ Auth::user()->name }}!</span>
+                        @auth
+                            <span>Halo, {{ Auth::user()->name }}!</span>
+                        @endauth
 
                     </a>
                     {{-- <div class="drop-down dropdown-language animated fadeIn  dropdown-menu">

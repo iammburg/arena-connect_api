@@ -54,14 +54,19 @@
                                                 <td>{{ $field->descriptions }}</td>
                                                 <td>{{ $field->status }}</td>
                                                 <td>
+                                                    <span data-toggle="tooltip" data-placement="top" title="Ubah Status">
+                                                        <button type="button" class="btn btn-success btn-sm mb-1"
+                                                            data-toggle="modal"
+                                                            data-target="#updateStatus{{ $field->id }}">
+                                                            <i class="fas fa-check" aria-hidden="true"></i>
+                                                        </button>
+                                                    </span>
+
                                                     <a href="{{ route('fields.edit', $field->id) }}"
-                                                        class="btn btn-warning btn-sm" data-toggle="tooltip"><i
+                                                        class="btn btn-warning btn-sm mb-1" data-toggle="tooltip"><i
                                                             class="fas fa-pencil-alt" aria-hidden="true"></i></a>
                                                     {{-- Hapus Data --}}
-                                                    <a href="#" class="btn btn-danger btn-sm" data-toggle="tooltip"
-                                                        data-confirm="Yakin?|Apakah Anda yakin akan menghapus:  <b>{{ $field->name }}</b>?"
-                                                        data-confirm-yes="event.preventDefault();
-                    document.getElementById('delete-portofolio-{{ $field->id }}').submit();"><i
+                                                    <a href="#" class="btn btn-danger btn-sm mb-1"><i
                                                             class="fas fa-trash" aria-hidden="true"></i></a>
                                                     <form id="delete-portofolio-{{ $field->id }}"
                                                         action="{{ route('fields.destroy', $field->id) }}" method="POST"
@@ -71,8 +76,56 @@
                                                     </form>
                                                 </td>
                                             </tr>
-                                        @endforeach
 
+                                            <div class="modal fade" id="updateStatus{{ $field->id }}" tabindex="-1"
+                                                role="dialog" aria-labelledby="updateStatusLabel{{ $field->id }}"
+                                                aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title"
+                                                                id="updateStatusLabel{{ $field->id }}">
+                                                                Ubah Status Lapangan</h5>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <form action="{{ route('fields.update-status', $field->id) }}"
+                                                            method="POST" class="d-inline">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <div class="modal-body">
+                                                                <select name="status" id="status" class="form-control">
+                                                                    <option value="Tersedia"
+                                                                        {{ $field->status == 'Tersedia' ? 'selected' : '' }}>
+                                                                        Tersedia
+                                                                    </option>
+                                                                    <option value="Telah dibooking"
+                                                                        {{ $field->status == 'Telah dibooking' ? 'selected' : '' }}>
+                                                                        Telah dibooking
+                                                                    </option>
+                                                                    <option value="Dalam perbaikan"
+                                                                        {{ $field->status == 'Dalam perbaikan' ? 'selected' : '' }}>
+                                                                        Dalam perbaikan
+                                                                    </option>
+                                                                    <option value="Tidak tersedia"
+                                                                        {{ $field->status == 'Tidak tersedia' ? 'selected' : '' }}>
+                                                                        Tidak tersedia
+                                                                    </option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                    data-dismiss="modal">Batal</button>
+                                                                <button type="submit"
+                                                                    class="btn btn-success">Konfirmasi</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
                                     @endif
                                 </tbody>
                             </table>

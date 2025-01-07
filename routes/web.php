@@ -27,15 +27,16 @@ Route::get('/', [
 
 Auth::routes();
 
-Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard')->middleware('auth');
 
 // Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
 
 Route::middleware(['auth'])->group(function () {
+    Route::get('dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard')->middleware('role:Admin Lapangan,Admin Aplikasi,Customer');
     Route::prefix('dashboard')->group(function () {
         Route::middleware(['role:Admin Lapangan,Admin Aplikasi'])->group(function () {
             Route::resource('/field-centres', FieldCentreController::class);
             Route::resource('/fields', FieldController::class);
+            Route::patch('/fields/{field}/update-status', [FieldController::class, 'updateStatus'])->name('fields.update-status');
             Route::resource('/field-price-schedules', FieldPriceScheduleController::class);
             Route::resource('/banks', BankController::class);
             Route::resource('/payments', PaymentController::class);
@@ -47,9 +48,5 @@ Route::middleware(['auth'])->group(function () {
             Route::resource('/users', UserController::class);
             Route::resource('/facilities', FacilityController::class);
         });
-
-        // Route::middleware(['role:Admin Lapangan'])->group(function () {
-        //     Route::resource('/field-price-schedules', FieldPriceScheduleController::class);
-        // });
     });
 });

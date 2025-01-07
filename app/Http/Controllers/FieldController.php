@@ -30,6 +30,23 @@ class FieldController extends Controller
         return view('fields.index', compact('fields'));
     }
 
+    public function updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:Tersedia,Telah dibooking,Dalam perbaikan,Tidak tersedia',
+        ]);
+
+        try {
+            $field = Field::findOrFail($id);
+            $field->status = $request->status;
+            $field->save();
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Status lapangan gagal diubah');
+        }
+
+        return redirect()->route('fields.index')->with('success', 'Status lapangan berhasil diubah');
+    }
+
     /**
      * Show the form for creating a new resource.
      */
