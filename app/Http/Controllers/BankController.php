@@ -31,14 +31,14 @@ class BankController extends Controller
     public function create()
     {
         if (Auth::user()->role == 'Admin Lapangan') {
-            $user = Auth::user()->id;
+            $users = Auth::user()->id;
             $field_centres = FieldCentre::where('user_id', Auth::user()->id)->get();
         } else if (Auth::user()->role == 'Admin Aplikasi') {
             $users = User::where('role', 'Admin Lapangan')->get();
             $field_centres = FieldCentre::all();
         }
 
-        return view('banks.create', compact('field_centres', 'users'));
+        return view('banks.create', compact('users', 'field_centres'));
     }
 
     /**
