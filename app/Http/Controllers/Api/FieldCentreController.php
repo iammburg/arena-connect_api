@@ -15,9 +15,12 @@ class FieldCentreController extends Controller
     public function index()
     {
         try {
-            $field_centres = FieldCentre::with(['facilities' => function ($query) {
-                $query->select('facilities.name');
-            }, 'fields'])->get();
+            $field_centres = FieldCentre::with([
+                'facilities' => function ($query) {
+                    $query->select('facilities.name');
+                },
+                'fields',
+            ])->get();
 
             return response()->json([
                 'success' => true,
@@ -95,15 +98,69 @@ class FieldCentreController extends Controller
         ], 201);
     }
 
+    public function getFieldByUserId($userId)
+    {
+        try {
+            // Ambil data FieldCentre berdasarkan user_id
+            $fields = FieldCentre::where('user_id', $userId)
+                ->with([
+                    'fields' => function ($query) {
+                        $query->select('id', 'name', 'field_centre_id', 'type', 'descriptions', 'status');
+                    },
+                    'fields.prices' => function ($query) {
+                        $query->select('field_id', 'price_from', 'price_to');
+                    },
+                    'fields.schedules' => function ($query) {
+                        $query->select('field_id', 'date', 'start_time', 'end_time', 'is_booked');
+                    },
+                ])
+                ->get();
+
+            // Format hasil data
+            $formattedFields = $fields->flatMap(function ($fieldCentre) {
+                return $fieldCentre->fields->map(function ($field) use ($fieldCentre) {
+                    return [
+                        'id' => $field->id,
+                        'name' => $field->name,
+                        'field_centre_id' => $field->field_centre_id,
+                        'type' => $field->type,
+                        'descriptions' => $field->descriptions,
+                        'status' => $field->status,
+                        'price' => $field->prices,
+                        'schedules' => $field->schedules,
+                        'address' => $fieldCentre->address,
+                        'price_from' => $fieldCentre->price_from,
+                        'images.*' => $fieldCentre->images,
+                    ];
+                });
+            });
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Successfully retrieved data on Sports Fields',
+                'data' => $formattedFields,
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve fields',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
+    }
+
     /**
      * Display the specified resource.
      */
     public function show($id)
     {
         try {
-            $field_centre = FieldCentre::with(['user', 'facilities' => function ($query) {
-                $query->select('facilities.name');
-            }])->findOrFail($id);
+            $field_centre = FieldCentre::with([
+                'user',
+                'facilities' => function ($query) {
+                    $query->select('facilities.name');
+                }
+            ])->findOrFail($id);
 
             return response()->json([
                 'success' => true,
