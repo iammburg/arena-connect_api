@@ -56,6 +56,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 Route::put('/payment-status/{id}', [PaymentsController::class, 'updateStatus']);
 Route::get('/total-revenue', [PaymentsController::class, 'getTotalRevenue']);
+Route::get('/field-centres/user/{userId}', [FieldCentreController::class, 'getFieldByUserId']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/bookings', [BookingController::class, 'index']);
