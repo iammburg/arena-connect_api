@@ -39,9 +39,12 @@ Route::middleware(['auth'])->group(function () {
             Route::patch('/fields/{field}/update-status', [FieldController::class, 'updateStatus'])->name('fields.update-status');
             Route::resource('/field-price-schedules', FieldPriceScheduleController::class);
             Route::resource('/banks', BankController::class);
-            Route::resource('/payments', PaymentController::class);
+            // Route::resource('/payments', PaymentController::class);
             Route::patch('/payments/{payment}/approve', [PaymentController::class, 'approvePayment'])->name('payments.approve');
             Route::patch('/payments/{payment}/reject', [PaymentController::class, 'rejectPayment'])->name('payments.reject');
+        });
+        Route::middleware(['role:Customer,Admin Lapangan,Admin Aplikasi'])->group(function () {
+            Route::resource('/payments', PaymentController::class);
         });
 
         Route::middleware(['role:Admin Aplikasi'])->group(function () {

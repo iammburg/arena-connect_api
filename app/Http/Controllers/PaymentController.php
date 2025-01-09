@@ -20,6 +20,8 @@ class PaymentController extends Controller
             $payments = Payments::with('user', 'booking', 'field', 'bank')->whereHas('booking.field.fieldCentre', function ($query) {
                 $query->where('user_id', Auth::user()->id);
             })->get();
+        } else if (Auth::user()->role == 'Customer') {
+            $payments = Payments::with('user', 'booking', 'field', 'bank')->where('user_id', Auth::user()->id)->get();
         }
         return view('payments.index', compact('payments'));
     }

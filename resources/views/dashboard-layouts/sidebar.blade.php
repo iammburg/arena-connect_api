@@ -3,7 +3,7 @@
         <ul class="metismenu" id="menu">
             <li class="nav-label">Menu Dashboard</li>
             <li>
-                <a class="" href="{{ url('/') }}" aria-expanded="false">
+                <a class="" href="{{ url('/dashboard') }}" aria-expanded="false">
                     <i class="fa-solid fa-gauge-high"></i><span class="nav-text">Dashboard</span>
                 </a>
                 {{-- <ul aria-expanded="false">
@@ -52,12 +52,16 @@
                                 Pembayaran</span>
                         </a>
                     </li>
-                    <li>
-                        <a href="{{ url('/dashboard/payments') }}" aria-expanded="false">
-                            <i class="fa-solid fa-check-to-slot"></i></i><span class="nav-text">Konfirmasi Pembayaran</span>
-                        </a>
-                    </li>
                 @endif
+                @if (Auth::user()->role == 'Admin Lapangan' ||
+                        Auth::user()->role == 'Admin Aplikasi' ||
+                        Auth::user()->role == 'Customer')
+                @endif
+                <li>
+                    <a href="{{ url('/dashboard/payments') }}" aria-expanded="false">
+                        <i class="fa-solid fa-check-to-slot"></i></i><span class="nav-text">Konfirmasi Pembayaran</span>
+                    </a>
+                </li>
             @endauth
         </ul>
     </div>
