@@ -49,11 +49,11 @@
                     {{-- <li class="nav-item active"><a href="index.html" class="nav-link">Home</a></li> --}}
                     {{-- <li class="nav-item"><a href="{{ url('/dashboard') }}" target="_blank"
                             class="nav-link">Dashboard</a></li> --}}
-                    <li class="nav-item"><a href="about.html" class="nav-link">Tentang Kami</a></li>
-                    <li class="nav-item"><a href="pricing.html" class="nav-link">Harga</a></li>
-                    <li class="nav-item"><a href="car.html" class="nav-link">Pusat Lapangan</a></li>
+                    <li class="nav-item"><a href="#section-about" class="nav-link">Tentang Kami</a></li>
+                    {{-- <li class="nav-item"><a href="#section-price" class="nav-link">Harga</a></li> --}}
+                    <li class="nav-item"><a href="#section-price" class="nav-link">Pusat Lapangan</a></li>
                     {{-- <li class="nav-item"><a href="blog.html" class="nav-link">Blog</a></li> --}}
-                    <li class="nav-item"><a href="contact.html" class="nav-link">Kontak</a></li>
+                    <li class="nav-item"><a href="#section-footer" class="nav-link">Kontak</a></li>
 
                     @if (Route::has('login'))
                         @auth
@@ -180,7 +180,7 @@
     </section> --}}
 
 
-    <section class="ftco-section ftco-no-pt bg-light">
+    <section class="ftco-section ftco-no-pt bg-light" id="section-price">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-md-12 heading-section text-center ftco-animate mb-5">
@@ -271,7 +271,7 @@
         </div>
     </section>
 
-    <section class="ftco-section ftco-about">
+    <section class="ftco-section ftco-about" id="section-about">
         <div class="container">
             <div class="row no-gutters">
                 <div class="col-md-6 p-md-5 img img-2 d-flex justify-content-center align-items-center"
@@ -315,11 +315,11 @@
                     <h2 class="mb-3">Layanan Terbaru Kami</h2>
                 </div>
             </div>
-            <div class="row">
+            <div class="row justify-content-center">
                 <div class="col-md-3">
                     <div class="services services-2 w-100 text-center">
                         <div class="icon d-flex align-items-center justify-content-center"><span
-                                class="flaticon-wedding-car"></span></div>
+                                class="flaticon-handshake"></span></div>
                         <div class="text w-100">
                             <h3 class="heading mb-2">Booking Lapangan Online</h3>
                             <p>Nikmati kemudahan memesan lapangan olahraga favoritmu langsung dari aplikasi. Pilih
@@ -331,7 +331,7 @@
                 <div class="col-md-3">
                     <div class="services services-2 w-100 text-center">
                         <div class="icon d-flex align-items-center justify-content-center"><span
-                                class="flaticon-transportation"></span></div>
+                                class="flaticon-handshake"></span></div>
                         <div class="text w-100">
                             <h3 class="heading mb-2">Informasi Jadwal dan Ketersediaan</h3>
                             <p>Kami menawarkan sistem pembayaran yang cepat, aman, dan mudah. Fokuslah pada permainan,
@@ -342,22 +342,11 @@
                 <div class="col-md-3">
                     <div class="services services-2 w-100 text-center">
                         <div class="icon d-flex align-items-center justify-content-center"><span
-                                class="flaticon-car"></span></div>
+                                class="flaticon-handshake"></span></div>
                         <div class="text w-100">
                             <h3 class="heading mb-2">Rekomendasi Lapangan Terbaik</h3>
                             <p>Bingung memilih? Kami menyediakan rekomendasi lapangan terbaik berdasarkan lokasi, harga,
                                 fasilitas, dan ulasan pengguna.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="services services-2 w-100 text-center">
-                        <div class="icon d-flex align-items-center justify-content-center"><span
-                                class="flaticon-transportation"></span></div>
-                        <div class="text w-100">
-                            <h3 class="heading mb-2">Whole City Tour</h3>
-                            <p>A small river named Duden flows by their place and supplies it with the necessary
-                                regelialia.</p>
                         </div>
                     </div>
                 </div>
@@ -564,7 +553,7 @@
         </div>
     </section> --}}
 
-    <footer class="ftco-footer ftco-bg-dark ftco-section">
+    <footer class="ftco-footer ftco-bg-dark ftco-section" id="section-footer">
         <div class="container">
             <div class="row mb-5">
                 <div class="col-md">
@@ -583,25 +572,22 @@
                 </div>
                 <div class="col-md">
                     <div class="ftco-footer-widget mb-4 ml-md-5">
-                        <h2 class="ftco-heading-2">Information</h2>
+                        <h2 class="ftco-heading-2">Informasi</h2>
                         <ul class="list-unstyled">
-                            <li><a href="#" class="py-2 d-block">About</a></li>
-                            <li><a href="#" class="py-2 d-block">Services</a></li>
-                            <li><a href="#" class="py-2 d-block">Term and Conditions</a></li>
-                            <li><a href="#" class="py-2 d-block">Best Price Guarantee</a></li>
-                            <li><a href="#" class="py-2 d-block">Privacy &amp; Cookies Policy</a></li>
+                            <li><a href="#" class="py-2 d-block">Tentang Kami</a></li>
+                            <li><a href="#" class="py-2 d-block">Layanan</a></li>
+                            <li><a href="#" class="py-2 d-block">Syarat dan Ketentuan</a></li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-md">
                     <div class="ftco-footer-widget mb-4">
-                        <h2 class="ftco-heading-2">Customer Support</h2>
+                        <h2 class="ftco-heading-2">Dukungan Customer</h2>
                         <ul class="list-unstyled">
                             <li><a href="#" class="py-2 d-block">FAQ</a></li>
-                            <li><a href="#" class="py-2 d-block">Payment Option</a></li>
-                            <li><a href="#" class="py-2 d-block">Booking Tips</a></li>
-                            <li><a href="#" class="py-2 d-block">How it works</a></li>
-                            <li><a href="#" class="py-2 d-block">Contact Us</a></li>
+                            <li><a href="#" class="py-2 d-block">Pilihan Pembayaran</a></li>
+                            <li><a href="#" class="py-2 d-block">Tips Booking</a></li>
+                            <li><a href="#" class="py-2 d-block">Kontak Kami</a></li>
                         </ul>
                     </div>
                 </div>
