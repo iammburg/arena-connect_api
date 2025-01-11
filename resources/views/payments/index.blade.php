@@ -43,7 +43,9 @@
                                         <th>Metode Pembayaran</th>
                                         <th>Order ID</th>
                                         <th>Bukti Pembayaran</th>
-                                        <th>Aksi</th>
+                                        @if (Auth::user()->role == 'Admin Lapangan' || Auth::user()->role == 'Admin Aplikasi')
+                                            <th>Aksi</th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -92,31 +94,33 @@
                                                     </button>
                                                 </td>
                                                 <td>
-                                                    @if ($payment->status == 'Proses')
-                                                        <span data-toggle="tooltip" data-placement="top"
-                                                            title="Konfirmasi Pembayaran">
-                                                            <button type="button" class="btn btn-success btn-sm mb-1"
-                                                                data-toggle="modal"
-                                                                data-target="#approveModal{{ $payment->id }}">
+                                                    @if (Auth::user()->role == 'Admin Lapangan' || Auth::user()->role == 'Admin Aplikasi')
+                                                        @if ($payment->status == 'Proses')
+                                                            <span data-toggle="tooltip" data-placement="top"
+                                                                title="Konfirmasi Pembayaran">
+                                                                <button type="button" class="btn btn-success btn-sm mb-1"
+                                                                    data-toggle="modal"
+                                                                    data-target="#approveModal{{ $payment->id }}">
+                                                                    <i class="fas fa-check" aria-hidden="true"></i>
+                                                                </button>
+                                                            </span>
+
+                                                            <span data-toggle="tooltip" data-placement="top"
+                                                                title="Tolak Pembayaran">
+                                                                <button type="button" class="btn btn-danger btn-sm mb-1"
+                                                                    data-toggle="modal"
+                                                                    data-target="#rejectModal{{ $payment->id }}">
+                                                                    <i class="fas fa-times" aria-hidden="true"></i>
+                                                                </button>
+                                                            </span>
+                                                        @else
+                                                            <button class="btn btn-success btn-sm mb-1" disabled>
                                                                 <i class="fas fa-check" aria-hidden="true"></i>
                                                             </button>
-                                                        </span>
-
-                                                        <span data-toggle="tooltip" data-placement="top"
-                                                            title="Tolak Pembayaran">
-                                                            <button type="button" class="btn btn-danger btn-sm mb-1"
-                                                                data-toggle="modal"
-                                                                data-target="#rejectModal{{ $payment->id }}">
+                                                            <button class="btn btn-danger btn-sm mb-1" disabled>
                                                                 <i class="fas fa-times" aria-hidden="true"></i>
                                                             </button>
-                                                        </span>
-                                                    @else
-                                                        <button class="btn btn-success btn-sm mb-1" disabled>
-                                                            <i class="fas fa-check" aria-hidden="true"></i>
-                                                        </button>
-                                                        <button class="btn btn-danger btn-sm mb-1" disabled>
-                                                            <i class="fas fa-times" aria-hidden="true"></i>
-                                                        </button>
+                                                        @endif
                                                     @endif
                                                 </td>
                                             </tr>

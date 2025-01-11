@@ -36,29 +36,28 @@ Route::get('/', function () {
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 
-// Buat Field Centres
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::resource('field-centres', FieldCentreController::class);
-    Route::resource('facilities', FacilityController::class);
-    Route::resource('fields', FieldController::class);
+    Route::resource('/field-centres', FieldCentreController::class)->middleware('auth:sanctum');
     Route::get('/field-centres/{fieldCentreId}/fields', [FieldController::class, 'indexByFieldCentre']);
-});
 
-// Buat Bookings
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::resource('bookings', BookingController::class);
-});
-// Buat Show Payments
-Route::middleware(['auth:sanctum'])->group(function () {
+    Route::resource('fields', FieldController::class);
+
     Route::resource('/users', AuthController::class);
+
+    Route::resource('facilities', FacilityController::class);
+
+    Route::resource('bookings', BookingController::class);
+
     Route::resource('payments', PaymentsController::class);
     Route::get('payments/{id}', [PaymentsController::class, 'show']);
     Route::post('payments/{id}', [PaymentsController::class, 'updatePayment']);
     Route::get('payments/{field_centre_id}/banks', [PaymentsController::class, 'getBanksByFieldCentreId']);
+    Route::get('payments/user/{user_id}', [PaymentsController::class, 'getPaymentByUser']);
 });
 
 Route::put('/payment-status/{id}', [PaymentsController::class, 'updateStatus']);
 Route::get('/total-revenue', [PaymentsController::class, 'getTotalRevenue']);
+Route::get('/field-centres/user/{userId}', [FieldCentreController::class, 'getFieldByUserId']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/bookings', [BookingController::class, 'index']);

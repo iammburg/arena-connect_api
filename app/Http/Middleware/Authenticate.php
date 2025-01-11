@@ -14,15 +14,14 @@ class Authenticate extends Middleware
     {
         return $request->expectsJson() ? null : route('login');
     }
-    protected function unauthenticated($request, array $guards)
-    {
-        if ($request->expectsJson()) {
-            abort(response()->json([
-                'status' => false,
-                'message' => 'Unauthorized access!',
-            ], 401));
-        } else {
-            redirect()->guest(route('login'));
-        }
-    }
+    // protected function unauthenticated($request, array $guards)
+    // {
+    //     \Log::info('Unauthenticated access attempt: ', ['url' => $request->url()]);
+    //     if ($request->expectsJson()) {
+    //         abort(response()->json([
+    //             'status' => false,
+    //             'message' => 'Unauthorized access!',
+    //         ], 401));
+    //     }
+    // }
 }
