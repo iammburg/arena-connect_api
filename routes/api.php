@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\FieldCentreController;
 use App\Http\Controllers\Api\FacilityController;
 use App\Http\Controllers\Api\FieldController;
 use App\Http\Controllers\Api\PaymentsController;
+use App\Http\Controllers\Api\BankController;
 use App\Models\Payments;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -54,12 +55,18 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('payments/user/{user_id}', [PaymentsController::class, 'getPaymentByUser']);
 });
 
-Route::put('/payment-status/{id}', [PaymentsController::class, 'updateStatus']);
-Route::get('/total-revenue', [PaymentsController::class, 'getTotalRevenue']);
-Route::get('/field-centres/user/{userId}', [FieldCentreController::class, 'getFieldByUserId']);
-
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/bookings', [BookingController::class, 'index']);
     Route::post('/bookings', [BookingController::class, 'store']);
     Route::delete('/bookings/{id}', [BookingController::class, 'destroy']);
+});
+
+Route::put('/payment-status/{id}', [PaymentsController::class, 'updateStatus']);
+Route::get('/total-revenue', [PaymentsController::class, 'getTotalRevenue']);
+Route::get('/field-centres/user/{userId}', [FieldCentreController::class, 'getFieldByUserId']);
+
+// Route Admin
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::get('/field-centres/user/{userId}', [FieldCentreController::class, 'getFieldByUserId']);
+    Route::get('/payment/user/{userId}', [BankController::class, 'getPaymentsByUserId']);
 });
