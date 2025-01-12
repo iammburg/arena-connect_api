@@ -30,7 +30,7 @@ class Payments extends Model
     }
     public function field()
     {
-        return $this->hasOneThrough(Field::class, Booking::class, 'id', 'id', 'booking_id', 'field_id')->select('fields.id as field_id', 'fields.name');
+        return $this->hasOneThrough(Field::class, Booking::class, 'id', 'id', 'booking_id', 'field_id')->select('fields.id as field_id', 'fields.name', 'fields.field_centre_id');
     }
 
     public function bank()
