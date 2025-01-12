@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use App\Models\FieldCentre;
 
 class AuthController extends Controller
 {
@@ -43,7 +44,6 @@ class AuthController extends Controller
             'data' => $register_data,
         ], 201);
     }
-
     public function login(Request $request)
     {
         $rules = [
@@ -67,12 +67,21 @@ class AuthController extends Controller
             ], 401);
         }
 
+        // Ambil data pengguna yang sedang login
         $login_data = User::where('email', $request->email)->first();
+
+        // Ambil field centre yang terkait dengan pengguna
+        $fields = FieldCentre::where('user_id', $login_data->id)->get(); // Menggunakan id pengguna
+
+        // Ambil fieldCentreId secara statis (misalnya, ID pertama)
+        $fieldCentreId = $fields->isNotEmpty() ? $fields->first()->id : null; // Mengambil ID pertama atau null jika tidak ada
+
         return response()->json([
             'success' => true,
             'message' => 'Login successful',
             'token' => $login_data->createToken('auth_token')->plainTextToken,
-            'user' => $login_data
+            'user' => $login_data,
+            'field-centre-id' => $fieldCentreId // Menambahkan hanya fieldCentreId ke respons
         ], 200);
     }
 
@@ -127,9 +136,9 @@ class AuthController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name'      => 'required|string|max:255',
-            'email'     => 'required|string|email|max:255',
-            'password'  => 'string',
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'password' => 'string',
             // 'role'      => 'required',
         ]);
 
