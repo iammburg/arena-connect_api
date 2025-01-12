@@ -50,6 +50,11 @@ class User extends Authenticatable
         return $this->hasOne(FieldCentre::class);
     }
 
+    public function fieldCentre()
+    {
+        return $this->belongsTo(FieldCentre::class, 'field_centre_id');
+    }
+
     public function payments()
     {
         return $this->hasOne(Payments::class);
