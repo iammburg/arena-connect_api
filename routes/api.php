@@ -55,6 +55,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('payments/user/{user_id}', [PaymentsController::class, 'getPaymentByUser']);
 });
 
+Route::get('payments/user/{user_id}/{payment_id}', [PaymentsController::class, 'showPaymentByUser']);
+
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/bookings', [BookingController::class, 'index']);
     Route::post('/bookings', [BookingController::class, 'store']);

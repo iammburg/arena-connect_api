@@ -79,6 +79,39 @@ class PaymentsController extends Controller
         }
     }
 
+    public function showPaymentByUser($user_id, $payment_id)
+    {
+        try {
+            $payment = Payments::with([
+                'field' => function ($query) {
+                    $query->select('fields.id as field_id', 'fields.name', 'fields.field_centre_id')
+                        ->with([
+                            'fieldCentre:id,name,rating,address',
+                        ]);
+                },
+                'booking' => function ($query) {
+                    $query->select('id', 'field_id', 'booking_start', 'booking_end', 'date');
+                },
+                'user:id,name,email',
+                'bank:id,bank_name,account_number,field_centre_id',
+            ])->where('user_id', $user_id)
+                ->where('id', $payment_id)
+                ->firstOrFail();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Successfully retrieved payment details for the user.',
+                'data' => $payment,
+            ], 200);
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to retrieve payment details.',
+                'error' => $th->getMessage(),
+            ], 500);
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      */
