@@ -98,10 +98,16 @@ class BankController extends Controller
         }
     }
 
+    /**
+     * Display a listing of banks.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index()
     {
         try {
             $banks = Bank::all();
+
             return response()->json([
                 'status' => 'success',
                 'data' => $banks
@@ -114,6 +120,11 @@ class BankController extends Controller
         }
     }
 
+    /**
+     * Get data for creating a new bank.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getFormData()
     {
         try {
@@ -121,6 +132,7 @@ class BankController extends Controller
                 'users' => User::where('role', 'Admin Lapangan')->get(),
                 'field_centres' => FieldCentre::all()
             ];
+
             return response()->json([
                 'status' => 'success',
                 'data' => $data
@@ -133,6 +145,12 @@ class BankController extends Controller
         }
     }
 
+    /**
+     * Store a newly created bank.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(Request $request)
     {
         try {
@@ -142,7 +160,9 @@ class BankController extends Controller
                 'field_centre_id' => 'required|numeric',
                 'user_id' => 'required|numeric',
             ]);
+
             $bank = Bank::create($validated);
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'Bank/Metode Pembayaran berhasil ditambahkan',
@@ -162,6 +182,12 @@ class BankController extends Controller
         }
     }
 
+    /**
+     * Display the specified bank.
+     *
+     * @param  \App\Models\Bank  $bank
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function show(Bank $bank)
     {
         try {
@@ -177,6 +203,13 @@ class BankController extends Controller
         }
     }
 
+    /**
+     * Update the specified bank.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Bank  $bank
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(Request $request, Bank $bank)
     {
         try {
@@ -186,7 +219,9 @@ class BankController extends Controller
                 'field_centre_id' => 'required|numeric',
                 'user_id' => 'required|numeric',
             ]);
+
             $bank->update($validated);
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'Bank/Metode Pembayaran berhasil diperbarui',
@@ -206,10 +241,17 @@ class BankController extends Controller
         }
     }
 
+    /**
+     * Remove the specified bank.
+     *
+     * @param  \App\Models\Bank  $bank
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy(Bank $bank)
     {
         try {
             $bank->delete();
+
             return response()->json([
                 'status' => 'success',
                 'message' => 'Bank/Metode Pembayaran berhasil dihapus'

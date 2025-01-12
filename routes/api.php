@@ -78,3 +78,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/field-centres/user/{userId}', [FieldCentreController::class, 'getFieldByUserId']);
     Route::get('/payment/user/{userId}', [BankController::class, 'getPaymentsByUserId']);
 });
+
+
+Route::get('bank/form-data', [BankController::class, 'getFormData']);
+Route::apiResource('bank', BankController::class);
+Route::post('', [BankController::class,'store']);
