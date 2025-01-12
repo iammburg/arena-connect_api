@@ -66,6 +66,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::put('/payment-status/{id}', [PaymentsController::class, 'updateStatus']);
 Route::get('/total-revenue', [PaymentsController::class, 'getTotalRevenue']);
 Route::get('/field-centres/user/{userId}', [FieldCentreController::class, 'getFieldByUserId']);
+Route::get('bank/form-data', [BankController::class, 'getFormData']);
+Route::apiResource('bank', BankController::class);
 
 // Route Admin
 Route::middleware(['auth:sanctum'])->group(function () {
