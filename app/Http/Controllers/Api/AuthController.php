@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\FieldCentre;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -67,12 +68,21 @@ class AuthController extends Controller
             ], 401);
         }
 
+        // Ambil data pengguna yang sedang login
         $login_data = User::where('email', $request->email)->first();
+
+        // Ambil field centre yang terkait dengan pengguna
+        $fields = FieldCentre::where('user_id', $login_data->id)->get(); // Menggunakan id pengguna
+
+        // Ambil fieldCentreId secara statis (misalnya, ID pertama)
+        $fieldCentreId = $fields->isNotEmpty() ? $fields->first()->id : null; // Mengambil ID pertama atau null jika tidak ada
+
         return response()->json([
             'success' => true,
             'message' => 'Login successful',
             'token' => $login_data->createToken('auth_token')->plainTextToken,
-            'user' => $login_data
+            'user' => $login_data,
+            'field-centre-id' => $fieldCentreId // Menambahkan hanya fieldCentreId ke respons
         ], 200);
     }
 
