@@ -13,7 +13,7 @@ class FieldSchedule extends Model
         "start_time",
         "end_time",
         "is_booked",
-        "session_name"  // Menambahkan kolom untuk menyimpan nama sesi
+        // "session_name"  // Menambahkan kolom untuk menyimpan nama sesi
     ];
 
     public function field()

@@ -45,7 +45,6 @@ class FieldPriceScheduleController extends Controller
                 'date' => 'required|date|after_or_equal:today',
                 'start_time' => ['required', 'regex:/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/'],
                 'end_time' => ['required', 'regex:/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/', 'after:start_time'],
-                'session_name' => 'required|string|max:255', // Added session_name validation
             ], [
                 'start_time.regex' => 'The start time must be in 24-hour format (HH:mm), e.g., 13:30',
                 'end_time.regex' => 'The end time must be in 24-hour format (HH:mm), e.g., 14:30',
@@ -65,7 +64,6 @@ class FieldPriceScheduleController extends Controller
 
             $schedule = FieldSchedule::create([
                 'field_id' => $validated['field_id'],
-                'session_name' => $validated['session_name'], // Added session_name
                 'date' => $validated['date'],
                 'start_time' => $startTime,
                 'end_time' => $endTime,
@@ -101,11 +99,10 @@ class FieldPriceScheduleController extends Controller
             $validated = $request->validate([
                 'field_id' => 'required|exists:fields,id',
                 'schedules' => 'required|array',
-                'schedules.*.session' => 'required|string|max:255',
                 'schedules.*.start_time' => ['required', 'regex:/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/'],
                 'schedules.*.end_time' => ['required', 'regex:/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/'],
                 'schedules.*.price' => 'required|numeric|min:0',
-                'schedules.*.date' => 'required|date' // Add date validation
+                'schedules.*.date' => 'required|date'
             ]);
 
             DB::beginTransaction();
@@ -131,8 +128,7 @@ class FieldPriceScheduleController extends Controller
 
                 $fieldSchedule = FieldSchedule::create([
                     'field_id' => $validated['field_id'],
-                    'session_name' => $schedule['session'],
-                    'date' => $schedule['date'],  // Add the date field
+                    'date' => $schedule['date'],
                     'start_time' => $startTime,
                     'end_time' => $endTime,
                     'is_booked' => false
