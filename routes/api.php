@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\FacilityController;
 use App\Http\Controllers\Api\FieldController;
 use App\Http\Controllers\Api\PaymentsController;
 use App\Http\Controllers\Api\BankController;
+use App\Http\Controllers\Api\FieldPriceScheduleController;
 use App\Models\Payments;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -68,6 +69,7 @@ Route::get('/total-revenue', [PaymentsController::class, 'getTotalRevenue']);
 Route::get('/field-centres/user/{userId}', [FieldCentreController::class, 'getFieldByUserId']);
 Route::get('bank/form-data', [BankController::class, 'getFormData']);
 Route::apiResource('bank', BankController::class);
+Route::post('/field-schedules', [FieldPriceScheduleController::class, 'storeSchedules']);
 
 // Route Admin
 Route::middleware(['auth:sanctum'])->group(function () {
